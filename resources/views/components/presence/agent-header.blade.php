@@ -36,7 +36,7 @@
                 <p class="text-[11px] text-slate-400 leading-tight truncate">{{ $user->matricule ?? $user->email }} · {{ now()->translatedFormat('d M Y') }}</p>
             </div>
         </div>
-        <form method="POST" action="{{ route('filament.admin.auth.logout') }}" class="flex-shrink-0">
+        <form method="POST" action="/admin/logout" class="flex-shrink-0">
             @csrf
             <button type="submit" class="inline-flex items-center justify-center min-h-[44px] min-w-[44px] text-slate-300 hover:text-white transition p-2 rounded-xl hover:bg-white/10 touch-manipulation" title="Se déconnecter">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

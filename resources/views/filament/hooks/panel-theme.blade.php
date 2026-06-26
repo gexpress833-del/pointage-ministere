@@ -183,4 +183,126 @@
             font-size: 0.875rem !important;
         }
     }
+
+    /* Formulaire de connexion Filament */
+    .fi-auth-card {
+        background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%) !important;
+        border: 1px solid rgba(59, 130, 246, 0.3) !important;
+        border-radius: 20px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.1) !important;
+        color: #ffffff !important;
+    }
+
+    .fi-auth-card-heading,
+    .fi-auth-card h1,
+    .fi-auth-card h2,
+    .fi-auth-card h3 {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .fi-auth-card-subheading,
+    .fi-auth-card p {
+        color: #cbd5e1 !important;
+    }
+
+    .fi-auth-form {
+        padding: 2rem !important;
+        color: #ffffff !important;
+    }
+
+    .fi-auth-form .fi-input,
+    .fi-auth-form .fi-select-input,
+    .fi-auth-form .fi-textarea {
+        background: rgba(15, 23, 42, 0.8) !important;
+        border: 1px solid rgba(59, 130, 246, 0.3) !important;
+        color: #ffffff !important;
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    .fi-auth-form .fi-input:focus,
+    .fi-auth-form .fi-select-input:focus,
+    .fi-auth-form .fi-textarea:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    .fi-auth-form .fi-input::placeholder,
+    .fi-auth-form .fi-select-input::placeholder,
+    .fi-auth-form .fi-textarea::placeholder {
+        color: #94a3b8 !important;
+    }
+
+    .fi-auth-form .fi-btn {
+        border-radius: 12px !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+    }
+
+    .fi-auth-form .fi-btn-color-primary {
+        background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+        border: none !important;
+        color: #fff !important;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+    }
+
+    .fi-auth-form .fi-btn-color-primary:hover {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
+    }
+
+    .fi-auth-form .fi-fo-field-wrp-label,
+    .fi-auth-form label {
+        color: #e2e8f0 !important;
+        font-weight: 500 !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .fi-auth-form .fi-checkbox {
+        background: rgba(15, 23, 42, 0.8) !important;
+        border: 1px solid rgba(59, 130, 246, 0.3) !important;
+        border-radius: 6px !important;
+    }
+
+    .fi-auth-form .fi-checkbox:checked {
+        background: #3b82f6 !important;
+        border-color: #3b82f6 !important;
+    }
+
+    .fi-auth-form .fi-checkbox-label,
+    .fi-auth-form .fi-fo-field-wrp-description {
+        color: #cbd5e1 !important;
+    }
+
+    /* Assurer que le body a un fond visible */
+    body.fi-body {
+        background: #0b1120 !important;
+    }
+
+    @media (max-width: 640px) {
+        .fi-auth-card {
+            margin: 1rem !important;
+            border-radius: 16px !important;
+        }
+
+        .fi-auth-form {
+            padding: 1.5rem !important;
+        }
+
+        .fi-auth-form .fi-input,
+        .fi-auth-form .fi-select-input,
+        .fi-auth-form .fi-textarea {
+            font-size: 0.9rem !important;
+            padding: 0.7rem 0.9rem !important;
+        }
+
+        .fi-auth-form .fi-btn {
+            padding: 0.7rem 1.25rem !important;
+            font-size: 0.9rem !important;
+        }
+    }
 </style>

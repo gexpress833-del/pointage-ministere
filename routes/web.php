@@ -16,6 +16,10 @@ Route::get('/', function () {
     return 'OK';
 });
 
+Route::get('/login', function () {
+    return redirect('/admin');
+})->name('login');
+
 Route::middleware('auth')->prefix('presence')->name('presence.')->group(function () {
     Route::get('/', [PresenceController::class, 'dashboard'])->name('dashboard');
     Route::get('/sign', [PresenceController::class, 'showSign'])->name('sign');
