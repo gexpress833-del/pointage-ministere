@@ -1,0 +1,55 @@
+# Déploiement Render — Laravel (PHP), pas Node.
+# Dashboard : New > Blueprint > connecter le repo GitHub
+# Ou : New Web Service > Runtime = PHP > voir README section Render
+
+services:
+  - type: web
+    name: pointage-ministere
+    runtime: php
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: chmod +x render-build.sh && ./render-build.sh
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    releaseCommand: php artisan migrate --force --no-interaction && php artisan db:seed --class=ParametresSeeder --force --no-interaction && (php artisan storage:link || true)
+    healthCheckPath: /up
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_TIMEZONE
+        value: Africa/Kinshasa
+      - key: APP_LOCALE
+        value: fr
+      - key: APP_FALLBACK_LOCALE
+        value: fr
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: info
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        fromDatabase:
+          name: pointage-db
+          property: connectionString
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        sync: false
+
+databases:
+  - name: pointage-db
+    plan: free
+    region: oregon
+    databaseName: pointage
+    user: pointage
