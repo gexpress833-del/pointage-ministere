@@ -13,7 +13,7 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: "true"
+        value: "false"
       - key: APP_TIMEZONE
         value: Africa/Kinshasa
       - key: APP_LOCALE
@@ -23,7 +23,7 @@ services:
       - key: LOG_CHANNEL
         value: stderr
       - key: LOG_LEVEL
-        value: debug
+        value: info
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_URL
