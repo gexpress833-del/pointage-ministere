@@ -8,6 +8,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/test', function () {
+    return 'Laravel is working!';
+});
+
 Route::get('/', function () {
     if (! Auth::check()) {
         return view('landing');
