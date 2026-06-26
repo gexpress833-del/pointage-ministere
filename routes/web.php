@@ -8,19 +8,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/test', function () {
+    return 'Laravel is working!';
+});
+
 Route::get('/', function () {
-    if (! Auth::check()) {
-        return view('landing');
-    }
-
-    /** @var User $user */
-    $user = Auth::user();
-
-    if (in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU], true)) {
-        return redirect()->route('presence.dashboard');
-    }
-
-    return redirect()->to(filament()->getHomeUrl() ?? '/admin');
+    return 'OK';
 });
 
 Route::middleware('auth')->prefix('presence')->name('presence.')->group(function () {
