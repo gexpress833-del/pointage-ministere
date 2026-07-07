@@ -57,6 +57,37 @@ Route::get('/debug', function () {
         $checks['users_table'] = 'ERROR: ' . $e->getMessage();
     }
 
+    // Bureaux table
+    try {
+        \DB::select('SELECT 1 FROM bureaux LIMIT 1');
+        $checks['bureaux_table'] = 'OK';
+    } catch (\Exception $e) {
+        $checks['bureaux_table'] = 'ERROR: ' . $e->getMessage();
+    }
+
+    // All tables
+    try {
+        $tables = \DB::select("SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename");
+        $checks['all_tables'] = array_map(fn($t) => $t->tablename, $tables);
+    } catch (\Exception $e) {
+        $checks['all_tables'] = 'ERROR: ' . $e->getMessage();
+    }
+
+    // Users count
+    try {
+        $checks['users_count'] = \DB::table('users')->count();
+        $checks['users_list'] = \DB::table('users')->select('id', 'email', 'role')->get();
+    } catch (\Exception $e) {
+        $checks['users_count'] = 'ERROR: ' . $e->getMessage();
+    }
+
+    // Bureaux count
+    try {
+        $checks['bureaux_count'] = \DB::table('bureaux')->count();
+    } catch (\Exception $e) {
+        $checks['bureaux_count'] = 'ERROR: ' . $e->getMessage();
+    }
+
     // Vite manifest
     $checks['vite_manifest'] = file_exists(public_path('build/manifest.json')) ? 'OK' : 'MISSING';
 
