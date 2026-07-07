@@ -83,6 +83,10 @@ class PresenceResource extends Resource
                 TextColumn::make('heure_arrivee')
                     ->label('Heure d\'arrivée')
                     ->sortable(),
+                TextColumn::make('heure_depart')
+                    ->label('Heure de départ')
+                    ->default('—')
+                    ->sortable(),
                 TextColumn::make('statut')
                     ->label('Statut')
                     ->badge()

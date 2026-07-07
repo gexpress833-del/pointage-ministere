@@ -8,12 +8,12 @@ class UserPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->isAdministrateur();
+        return $user->isAdministrateur() || $user->isSecretaire() || $user->isChefBureau();
     }
 
     public function view(User $user, User $model): bool
     {
-        if ($user->isAdministrateur()) {
+        if ($user->isAdministrateur() || $user->isSecretaire()) {
             return true;
         }
         if ($user->isChefBureau() && $user->bureau_id) {
@@ -25,13 +25,16 @@ class UserPolicy
 
     public function create(User $user): bool
     {
-        return $user->isAdministrateur();
+        return $user->isAdministrateur() || $user->isSecretaire();
     }
 
     public function update(User $user, User $model): bool
     {
-        if ($user->isAdministrateur()) {
+        if ($user->isAdministrateur() || $user->isSecretaire()) {
             return true;
+        }
+        if ($user->isChefBureau() && $user->bureau_id) {
+            return $model->bureau_id === $user->bureau_id;
         }
 
         return $user->id === $model->id;

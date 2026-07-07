@@ -31,7 +31,7 @@ class ServiceResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->isAdministrateur() ?? false;
+        return auth()->user()?->isAdministrateur() || auth()->user()?->isSecretaire() ?? false;
     }
 
     public static function form(Schema $schema): Schema

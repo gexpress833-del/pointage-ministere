@@ -6,6 +6,7 @@ use App\Models\Parametre;
 use App\Models\Presence;
 use App\Models\SessionPresence;
 use App\Models\User;
+use App\Services\ImagekitService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -38,16 +39,16 @@ class PresenceController extends Controller
     {
         $user = Auth::user();
 
-        if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU], true)) {
+        if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU, User::ROLE_ADMIN, User::ROLE_SECRETAIRE, User::ROLE_COORDINATEUR], true)) {
             return view('presence.sign-blocked', [
                 'raison' => 'role',
                 'titre' => 'Accès non autorisé',
-                'message' => 'La signature de présence est réservée aux agents et aux chefs de bureau. Utilisez le tableau de bord pour la gestion.',
+                'message' => 'La signature de présence est réservée aux utilisateurs enregistrés.',
             ]);
         }
 
         // Vérification photo de référence
-        if (! $user->photo_reference || ! Storage::disk('local')->exists($user->photo_reference)) {
+        if (! $user->photo_reference) {
             return view('presence.sign-blocked', [
                 'raison' => 'photo',
                 'titre' => 'Photo de référence manquante',
@@ -124,6 +125,25 @@ class PresenceController extends Controller
         if (! $user->photo_reference) {
             abort(404);
         }
+
+        // Si c'est une URL Imagekit, proxifier l'image pour éviter les problèmes CORS
+        // (face-api.js doit lire les pixels via canvas, ce qui nécessite same-origin ou CORS)
+        if (ImagekitService::isImagekitUrl($user->photo_reference)) {
+            try {
+                $response = \Illuminate\Support\Facades\Http::timeout(15)->get($user->photo_reference);
+                if ($response->successful()) {
+                    return response($response->body(), 200, [
+                        'Content-Type' => $response->header('Content-Type', 'image/jpeg'),
+                        'Cache-Control' => 'public, max-age=3600',
+                        'Access-Control-Allow-Origin' => '*',
+                    ]);
+                }
+            } catch (\Exception $e) {
+                abort(404);
+            }
+        }
+
+        // Fallback: fichier local (anciennes photos pas encore migrées)
         $path = Storage::disk('local')->path($user->photo_reference);
         if (! file_exists($path)) {
             abort(404);
@@ -141,11 +161,14 @@ class PresenceController extends Controller
         $moisCourant = now()->format('Y-m');
         $statsMois = $this->statsPourMois($user, $moisCourant);
 
+        $sessionJour = SessionPresence::where('date', Carbon::today())->first();
+
         return view('presence.dashboard', [
             'user' => $user,
             'moisCourant' => $moisCourant,
             'statsMois' => $statsMois,
-            'sessionOuverte' => $this->sessionOuvertePour($user),
+            'sessionJour' => $sessionJour,
+            'sessionOuverte' => $sessionJour?->isOuverte() ?? false,
             'besoinPointerDepart' => $this->besoinPointerDepartPour($user),
         ]);
     }
@@ -275,7 +298,7 @@ class PresenceController extends Controller
 
         $user = Auth::user();
 
-        if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU], true)) {
+        if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU, User::ROLE_ADMIN, User::ROLE_SECRETAIRE, User::ROLE_COORDINATEUR], true)) {
             return response()->json(['success' => false, 'message' => 'Action non autorisée pour ce rôle.'], 403);
         }
         $session = SessionPresence::findOrFail($request->session_id);
@@ -300,9 +323,17 @@ class PresenceController extends Controller
                 $ext = $m[1] === 'jpeg' ? 'jpg' : $m[1];
                 $data = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64));
                 if ($data !== false) {
-                    $filename = 'presences/'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
-                    Storage::disk('local')->put($filename, $data);
-                    $photoCapture = $filename;
+                    $fileName = 'presence_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
+                    try {
+                        $imagekit = app(ImagekitService::class);
+                        $result = $imagekit->uploadBase64($data, $fileName, '/presences');
+                        $photoCapture = $result['url'];
+                    } catch (\Exception $e) {
+                        // Fallback: stocker localement si Imagekit échoue
+                        $localPath = 'presences/'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
+                        Storage::disk('local')->put($localPath, $data);
+                        $photoCapture = $localPath;
+                    }
                 }
             }
         }
@@ -339,7 +370,7 @@ class PresenceController extends Controller
 
         $user = Auth::user();
 
-        if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU], true)) {
+        if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU, User::ROLE_ADMIN, User::ROLE_SECRETAIRE, User::ROLE_COORDINATEUR], true)) {
             return response()->json(['success' => false, 'message' => 'Action non autorisée pour ce rôle.'], 403);
         }
 
@@ -372,8 +403,15 @@ class PresenceController extends Controller
                 $ext = $m[1] === 'jpeg' ? 'jpg' : $m[1];
                 $data = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64));
                 if ($data !== false) {
-                    $filename = 'presences/depart_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
-                    Storage::disk('local')->put($filename, $data);
+                    $fileName = 'depart_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
+                    try {
+                        $imagekit = app(ImagekitService::class);
+                        $imagekit->uploadBase64($data, $fileName, '/presences/departs');
+                    } catch (\Exception $e) {
+                        // Fallback: stocker localement si Imagekit échoue
+                        $localPath = 'presences/depart_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
+                        Storage::disk('local')->put($localPath, $data);
+                    }
                 }
             }
         }

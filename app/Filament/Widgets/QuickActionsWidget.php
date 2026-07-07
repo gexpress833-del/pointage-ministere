@@ -33,6 +33,7 @@ class QuickActionsWidget extends Widget
 
         $canViewReports = $user && in_array($user->role, [
             User::ROLE_ADMIN,
+            User::ROLE_SECRETAIRE,
             User::ROLE_COORDINATEUR,
             User::ROLE_CHEF_BUREAU,
         ]);

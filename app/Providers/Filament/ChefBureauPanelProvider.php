@@ -28,18 +28,17 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class ChefBureauPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('chef')
+            ->path('chef')
             ->login()
             ->brandName(config('app.name'))
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Amber,
             ])
             ->darkMode(true)
             ->renderHook(
@@ -50,7 +49,6 @@ class AdminPanelProvider extends PanelProvider
                 'Présence',
                 'Organisation',
                 'Communication',
-                'Configuration',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -70,7 +68,13 @@ class AdminPanelProvider extends PanelProvider
                     ->icon(Heroicon::OutlinedArrowLeftStartOnRectangle)
                     ->group('Présence')
                     ->sort(0)
-                    ->visible(fn () => Auth::user()?->role === User::ROLE_ADMIN),
+                    ->visible(fn () => Auth::user()?->role === User::ROLE_CHEF_BUREAU),
+                NavigationItem::make('Mon pointage')
+                    ->url(url('/presence'))
+                    ->icon(Heroicon::OutlinedClipboardDocumentCheck)
+                    ->group('Présence')
+                    ->sort(1)
+                    ->visible(fn () => Auth::user()?->role === User::ROLE_CHEF_BUREAU),
             ])
             ->middleware([
                 EncryptCookies::class,

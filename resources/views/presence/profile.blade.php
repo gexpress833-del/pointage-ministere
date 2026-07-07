@@ -170,6 +170,15 @@
                 Enregistrer les modifications
             </button>
         </form>
+
+        <div class="glass rounded-2xl p-4 sm:p-5 space-y-4 border border-amber-500/20">
+            <h2 class="text-sm font-semibold text-amber-100">Sécurité du compte</h2>
+            <p class="text-xs text-slate-400">Modifiez votre mot de passe régulièrement pour garantir la sécurité de votre compte.</p>
+            <a href="{{ route('password.change') }}"
+               class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm shadow-lg transition touch-manipulation">
+                Changer mon mot de passe
+            </a>
+        </div>
     </main>
 </body>
 </html>

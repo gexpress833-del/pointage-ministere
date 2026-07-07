@@ -24,7 +24,8 @@ class ListSessionsPresence extends ListRecords
                 ->label('Ouvrir session aujourd\'hui')
                 ->icon('heroicon-o-calendar-days')
                 ->color('success')
-                ->visible(fn () => Auth::user()?->isAdministrateur())
+                ->visible(fn () => Auth::user()?->isAdministrateur() || Auth::user()?->isSecretaire())
+                ->authorize(fn () => Auth::user()?->isAdministrateur() || Auth::user()?->isSecretaire() ?? false)
                 ->action(function () {
                     $today = Carbon::today();
                     if (SessionPresence::where('date', $today)->exists()) {

@@ -3,23 +3,57 @@
 namespace App\Filament\Resources\Users\Pages;
 
 use App\Filament\Resources\Users\UserResource;
+use App\Services\ImagekitService;
 use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
+    protected ?string $tempPassword = null;
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Vérifier que le password est présent et non vide
-        if (empty($data['password'])) {
-            $this->halt();
+        $this->tempPassword = \Illuminate\Support\Str::random(12);
+        $data['password'] = $this->tempPassword;
+        $data['must_change_password'] = true;
+
+        // Upload direct de la photo vers Imagekit
+        if (! empty($data['photo_reference']) && Storage::disk('local')->exists($data['photo_reference'])) {
+            $localPath = $data['photo_reference'];
+            try {
+                $imagekit = app(ImagekitService::class);
+                $localFile = Storage::disk('local')->path($localPath);
+                $extension = pathinfo($localFile, PATHINFO_EXTENSION) ?: 'jpg';
+                $fileName = 'ref_'.time().'.'.$extension;
+
+                $result = $imagekit->upload($localFile, $fileName, '/photos_reference');
+                $data['photo_reference'] = $result['url'];
+
+                Storage::disk('local')->delete($localPath);
+            } catch (\Exception $e) {
+                \Filament\Notifications\Notification::make()
+                    ->title('Erreur Imagekit')
+                    ->body('La photo n\'a pas pu être uploadée: '.$e->getMessage())
+                    ->danger()
+                    ->persistent()
+                    ->send();
+            }
         }
 
-        // Hasher le password
-        $data['password'] = Hash::make($data['password']);
-
         return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        if ($this->tempPassword) {
+            \Filament\Notifications\Notification::make()
+                ->title('Utilisateur créé')
+                ->body("Mot de passe temporaire : {$this->tempPassword} — L'utilisateur devra le changer à sa première connexion.")
+                ->success()
+                ->persistent()
+                ->send();
+        }
     }
 }

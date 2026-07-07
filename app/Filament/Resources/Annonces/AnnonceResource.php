@@ -133,6 +133,6 @@ class AnnonceResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return Auth::user()?->isAdministrateur() ?? false;
+        return Auth::user()?->isAdministrateur() || Auth::user()?->isSecretaire() ?? false;
     }
 }

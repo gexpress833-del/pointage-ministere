@@ -13,12 +13,29 @@ class LoginResponse implements LoginResponseContract
         /** @var User|null $user */
         $user = Auth::user();
 
-        // Les agents et chefs de bureau vont vers leur portail personnel
-        if ($user && in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU])) {
+        if (! $user) {
+            return redirect()->to('/');
+        }
+
+        // Forcer le changement de mot de passe à la première connexion
+        if ($user->must_change_password) {
+            return redirect()->route('password.change');
+        }
+
+        // Les agents vont vers leur portail personnel
+        if ($user->isAgent()) {
             return redirect()->route('presence.dashboard');
         }
 
-        // Admins et coordinateurs vont vers le tableau de bord Filament
-        return redirect()->to(filament()->getHomeUrl() ?? '/admin');
+        // Chaque rôle va vers son propre panel Filament
+        $panelPath = match ($user->role) {
+            User::ROLE_ADMIN => '/admin',
+            User::ROLE_SECRETAIRE => '/secretaire',
+            User::ROLE_COORDINATEUR => '/coordinateur',
+            User::ROLE_CHEF_BUREAU => '/chef',
+            default => '/',
+        };
+
+        return redirect()->to($panelPath);
     }
 }

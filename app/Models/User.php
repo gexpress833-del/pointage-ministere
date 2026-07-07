@@ -20,6 +20,8 @@ class User extends Authenticatable implements FilamentUser
 
     public const ROLE_CHEF_BUREAU = 'chef_bureau';
 
+    public const ROLE_SECRETAIRE = 'secretaire';
+
     public const ROLE_AGENT = 'agent';
 
     protected $fillable = [
@@ -34,6 +36,7 @@ class User extends Authenticatable implements FilamentUser
         'service_id',
         'role',
         'password',
+        'must_change_password',
     ];
 
     protected $hidden = [
@@ -46,6 +49,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'must_change_password' => 'boolean',
         ];
     }
 
@@ -66,12 +70,13 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return in_array($this->role, [
-            self::ROLE_ADMIN,
-            self::ROLE_COORDINATEUR,
-            self::ROLE_CHEF_BUREAU,
-            self::ROLE_AGENT,
-        ], true);
+        return match ($panel->getId()) {
+            'admin' => $this->isAdministrateur(),
+            'secretaire' => $this->isSecretaire(),
+            'coordinateur' => $this->isCoordinateur(),
+            'chef' => $this->isChefBureau(),
+            default => false,
+        };
     }
 
     public function isAdministrateur(): bool
@@ -87,6 +92,11 @@ class User extends Authenticatable implements FilamentUser
     public function isChefBureau(): bool
     {
         return $this->role === self::ROLE_CHEF_BUREAU;
+    }
+
+    public function isSecretaire(): bool
+    {
+        return $this->role === self::ROLE_SECRETAIRE;
     }
 
     public function isAgent(): bool

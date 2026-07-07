@@ -16,9 +16,13 @@
 
     @php
         $u = auth()->user();
-        $retourUrl = ($u && ($u->isAdministrateur() || $u->isCoordinateur() || $u->isChefBureau()))
-            ? url('/admin')
-            : route('presence.dashboard');
+        $retourUrl = match($u?->role) {
+            'administrateur' => url('/admin'),
+            'secretaire' => url('/secretaire'),
+            'coordinateur' => url('/coordinateur'),
+            'chef_bureau' => url('/chef'),
+            default => route('presence.dashboard'),
+        };
     @endphp
     <header class="bg-blue-700 text-white px-4 py-3 flex items-center gap-3 shadow-md flex-shrink-0" style="padding-top: max(0.75rem, env(safe-area-inset-top, 0px));">
         <a href="{{ $retourUrl }}" class="inline-flex items-center justify-center min-h-[44px] min-w-[44px] text-white opacity-75 hover:opacity-100 transition -ml-1 rounded-full" title="Retour">

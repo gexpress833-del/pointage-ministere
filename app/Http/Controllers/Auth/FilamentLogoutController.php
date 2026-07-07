@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Filament\Auth\Http\Responses\Contracts\LogoutResponse;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FilamentLogoutController
 {
-    public function __invoke(Request $request): LogoutResponse
+    public function __invoke(Request $request)
     {
         // Déconnexion du guard Filament (généralement 'web')
         Filament::auth()->logout();
@@ -20,6 +19,6 @@ class FilamentLogoutController
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return app(LogoutResponse::class);
+        return redirect()->route('home');
     }
 }

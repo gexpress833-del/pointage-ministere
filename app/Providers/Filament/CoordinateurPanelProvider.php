@@ -28,18 +28,17 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class CoordinateurPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('coordinateur')
+            ->path('coordinateur')
             ->login()
             ->brandName(config('app.name'))
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Green,
             ])
             ->darkMode(true)
             ->renderHook(
@@ -50,7 +49,6 @@ class AdminPanelProvider extends PanelProvider
                 'Présence',
                 'Organisation',
                 'Communication',
-                'Configuration',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -62,7 +60,6 @@ class AdminPanelProvider extends PanelProvider
                 QuickActionsWidget::class,
                 AnnoncesWidget::class,
                 PresenceStatsWidget::class,
-                BureauAgentsStatsWidget::class,
             ])
             ->navigationItems([
                 NavigationItem::make('Accueil du site')
@@ -70,7 +67,7 @@ class AdminPanelProvider extends PanelProvider
                     ->icon(Heroicon::OutlinedArrowLeftStartOnRectangle)
                     ->group('Présence')
                     ->sort(0)
-                    ->visible(fn () => Auth::user()?->role === User::ROLE_ADMIN),
+                    ->visible(fn () => Auth::user()?->role === User::ROLE_COORDINATEUR),
             ])
             ->middleware([
                 EncryptCookies::class,

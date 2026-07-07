@@ -154,6 +154,7 @@
                     <p class="qa-role">
                         @switch($user?->role)
                             @case('administrateur') Administrateur @break
+                            @case('secretaire') Secrétaire @break
                             @case('coordinateur') Coordinateur @break
                             @case('chef_bureau') Chef de bureau @break
                             @case('agent') Agent · {{ $user?->bureau?->nom_bureau ?? '—' }} @break
@@ -170,45 +171,33 @@
         </div>
 
         <div class="qa-grid">
-            @if(in_array($user?->role, ['agent', 'chef_bureau']))
-                <a href="{{ url('/presence') }}" class="qa-action">
-                    <span class="qa-icon qa-blue">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776 12 3l8.25 6.776v9.474A1.75 1.75 0 0 1 18.5 21h-13A1.75 1.75 0 0 1 3.75 19.25V9.776Z" />
-                        </svg>
-                    </span>
-                    <span class="qa-text">
-                        <p class="qa-title">Portail agent</p>
-                        <p class="qa-subtitle">Tableau de bord</p>
-                    </span>
-                </a>
+            <a href="{{ route('home') }}" class="qa-action">
+                <span class="qa-icon qa-blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776 12 3l8.25 6.776v9.474A1.75 1.75 0 0 1 18.5 21h-13A1.75 1.75 0 0 1 3.75 19.25V9.776Z" />
+                    </svg>
+                </span>
+                <span class="qa-text">
+                    <p class="qa-title">Accueil du site</p>
+                    <p class="qa-subtitle">Retour à la landing page</p>
+                </span>
+            </a>
 
-                <a href="{{ url('/presence/sign') }}" class="qa-action" @if(!$canSign) aria-disabled="true" @endif>
-                    <span class="qa-icon qa-green">
+            @if(in_array($user?->role, ['chef_bureau', 'secretaire']))
+                <a href="{{ url('/presence') }}" class="qa-action">
+                    <span class="qa-icon qa-teal">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                     </span>
                     <span class="qa-text">
-                        <p class="qa-title">Signer ma présence</p>
-                        <p class="qa-subtitle">{{ $canSign ? 'Session disponible' : ($dejaSigne ? 'Déjà signé aujourd\'hui' : 'Session fermée') }}</p>
-                    </span>
-                </a>
-
-                <a href="{{ route('presence.historique') }}" class="qa-action">
-                    <span class="qa-icon qa-teal">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                    </span>
-                    <span class="qa-text">
-                        <p class="qa-title">Mon historique</p>
-                        <p class="qa-subtitle">Présences par mois</p>
+                        <p class="qa-title">Mon pointage</p>
+                        <p class="qa-subtitle">Signer ou consulter mon historique</p>
                     </span>
                 </a>
             @endif
 
-            @if(in_array($user?->role, ['administrateur', 'coordinateur', 'chef_bureau']))
+            @if(in_array($user?->role, ['administrateur', 'secretaire', 'coordinateur', 'chef_bureau']))
                 <a href="{{ \App\Filament\Resources\SessionsPresence\SessionPresenceResource::getUrl('index') }}" class="qa-action">
                     <span class="qa-icon qa-blue">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -217,7 +206,13 @@
                     </span>
                     <span class="qa-text">
                         <p class="qa-title">Sessions de présence</p>
-                        <p class="qa-subtitle">{{ $session ? 'Gérer la session du jour' : 'Ouvrir ou consulter les sessions' }}</p>
+                        <p class="qa-subtitle">
+                            @if(in_array($user?->role, ['administrateur', 'secretaire']))
+                                {{ $session ? 'Session active aujourd\'hui' : 'Ouvrir ou consulter les sessions' }}
+                            @else
+                                {{ $session ? 'Session active aujourd\'hui' : 'Consulter les sessions' }}
+                            @endif
+                        </p>
                     </span>
                 </a>
 
@@ -248,7 +243,7 @@
                 </a>
             @endif
 
-            <form method="POST" action="{{ route('filament.admin.auth.logout') }}">
+            <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="qa-action-button">
                     <span class="qa-icon qa-red">

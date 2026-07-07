@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\AnnoncesWidget;
-use App\Filament\Widgets\BureauAgentsStatsWidget;
 use App\Filament\Widgets\PresenceStatsWidget;
 use App\Filament\Widgets\QuickActionsWidget;
 use App\Http\Middleware\ExtendExecutionTimeForFilament;
@@ -28,18 +27,17 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class SecretairePanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('secretaire')
+            ->path('secretaire')
             ->login()
             ->brandName(config('app.name'))
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Purple,
             ])
             ->darkMode(true)
             ->renderHook(
@@ -62,7 +60,6 @@ class AdminPanelProvider extends PanelProvider
                 QuickActionsWidget::class,
                 AnnoncesWidget::class,
                 PresenceStatsWidget::class,
-                BureauAgentsStatsWidget::class,
             ])
             ->navigationItems([
                 NavigationItem::make('Accueil du site')
@@ -70,7 +67,13 @@ class AdminPanelProvider extends PanelProvider
                     ->icon(Heroicon::OutlinedArrowLeftStartOnRectangle)
                     ->group('Présence')
                     ->sort(0)
-                    ->visible(fn () => Auth::user()?->role === User::ROLE_ADMIN),
+                    ->visible(fn () => Auth::user()?->role === User::ROLE_SECRETAIRE),
+                NavigationItem::make('Mon pointage')
+                    ->url(url('/presence'))
+                    ->icon(Heroicon::OutlinedClipboardDocumentCheck)
+                    ->group('Présence')
+                    ->sort(1)
+                    ->visible(fn () => Auth::user()?->role === User::ROLE_SECRETAIRE),
             ])
             ->middleware([
                 EncryptCookies::class,

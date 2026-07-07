@@ -13,6 +13,10 @@ php artisan db:seed --class=ParametresSeeder --force --no-interaction
 echo "Creating storage link..."
 php artisan storage:link || true
 
+# Cache config with env vars now available
+echo "Caching config..."
+php artisan config:cache
+
 # Start the application
 echo "Starting Laravel server..."
 exec php artisan serve --host=0.0.0.0 --port=80

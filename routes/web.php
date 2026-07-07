@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordChangeController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -13,14 +15,19 @@ Route::get('/test', function () {
 });
 
 Route::get('/', function () {
-    return 'OK';
+    return view('landing');
+})->name('home');
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/changer-mot-de-passe', [PasswordChangeController::class, 'showChangeForm'])->name('password.change');
+    Route::post('/changer-mot-de-passe', [PasswordChangeController::class, 'change'])->name('password.change.submit');
 });
 
-Route::get('/login', function () {
-    return redirect('/admin');
-})->name('login');
-
-Route::middleware('auth')->prefix('presence')->name('presence.')->group(function () {
+Route::middleware(['auth', 'password.force'])->prefix('presence')->name('presence.')->group(function () {
     Route::get('/', [PresenceController::class, 'dashboard'])->name('dashboard');
     Route::get('/sign', [PresenceController::class, 'showSign'])->name('sign');
     Route::post('/sign', [PresenceController::class, 'sign'])->name('sign.submit');
@@ -31,7 +38,7 @@ Route::middleware('auth')->prefix('presence')->name('presence.')->group(function
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'password.force'])->group(function () {
     Route::get('/reports/daily/{session}', [ReportController::class, 'dailyPdf'])->name('reports.daily');
     Route::get('/reports/monthly', [ReportController::class, 'monthlyPdf'])->name('reports.monthly');
     Route::get('/users/{user}/photo-reference', [UserPhotoController::class, 'show'])->name('users.photo-reference');

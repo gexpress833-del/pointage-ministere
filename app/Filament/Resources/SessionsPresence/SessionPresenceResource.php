@@ -52,7 +52,7 @@ class SessionPresenceResource extends Resource
                     ->label('Fermer')
                     ->icon(Heroicon::OutlinedXCircle)
                     ->color('danger')
-                    ->visible(fn (SessionPresence $record) => $record->isOuverte() && Auth::user()?->isAdministrateur())
+                    ->visible(fn (SessionPresence $record) => $record->isOuverte() && (Auth::user()?->isAdministrateur() || Auth::user()?->isSecretaire()))
                     ->action(function (SessionPresence $record) {
                         $record->update([
                             'statut' => SessionPresence::STATUT_FERMEE,
@@ -82,6 +82,7 @@ class SessionPresenceResource extends Resource
 
         return $user && in_array($user->role, [
             User::ROLE_ADMIN,
+            User::ROLE_SECRETAIRE,
             User::ROLE_COORDINATEUR,
             User::ROLE_CHEF_BUREAU,
         ]);
@@ -89,7 +90,7 @@ class SessionPresenceResource extends Resource
 
     public static function canCreate(): bool
     {
-        return Auth::user()?->isAdministrateur() ?? false;
+        return Auth::user()?->isAdministrateur() || Auth::user()?->isSecretaire() ?? false;
     }
 
     public static function getEloquentQuery(): Builder

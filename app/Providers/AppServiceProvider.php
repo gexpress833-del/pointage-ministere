@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Controllers\Auth\FilamentLogoutController;
 use App\Http\Responses\LoginResponse;
+use App\Services\ImagekitService;
 use Filament\Auth\Http\Controllers\LogoutController;
 use App\Models\Annonce;
 use Illuminate\Support\Facades\Schema;
@@ -26,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
             \Filament\Auth\Http\Responses\Contracts\LoginResponse::class,
             LoginResponse::class
         );
+
+        $this->app->singleton(ImagekitService::class);
     }
 
     /**

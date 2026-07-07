@@ -16,6 +16,35 @@
 
         @include('presence.partials.annonces')
 
+        <div class="glass rounded-2xl p-4 sm:p-5 border {{ $sessionOuverte ? 'border-green-400/25' : 'border-amber-400/25' }}">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-[0.18em]">Session du jour</h2>
+                    <p class="text-white text-base font-bold mt-0.5">
+                        @if($sessionOuverte)
+                            Session active
+                        @elseif($sessionJour)
+                            Session clôturée
+                        @else
+                            Aucune session ouverte
+                        @endif
+                    </p>
+                    <p class="text-slate-400 text-xs mt-1">
+                        @if($sessionOuverte)
+                            Vous pouvez enregistrer votre arrivée si ce n'est pas encore fait.
+                        @elseif($sessionJour)
+                            La session existe mais elle n'accepte plus de nouvelles arrivées.
+                        @else
+                            Une session doit être ouverte par un administrateur pour permettre le pointage.
+                        @endif
+                    </p>
+                </div>
+                <span class="inline-flex items-center justify-center rounded-full px-3 py-1.5 text-xs font-semibold {{ $sessionOuverte ? 'bg-green-500/15 text-green-200' : 'bg-amber-500/15 text-amber-200' }}">
+                    {{ $sessionOuverte ? 'Active' : 'Non active' }}
+                </span>
+            </div>
+        </div>
+
         <div class="glass rounded-2xl p-4 sm:p-5">
             <div class="flex items-start justify-between gap-3 mb-3">
                 <div>

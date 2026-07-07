@@ -32,7 +32,13 @@ class UserResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return Auth::user()?->isAdministrateur() ?? false;
+        $user = Auth::user();
+
+        return $user && in_array($user->role, [
+            User::ROLE_ADMIN,
+            User::ROLE_SECRETAIRE,
+            User::ROLE_CHEF_BUREAU,
+        ]);
     }
 
     public static function form(Schema $schema): Schema
@@ -56,6 +62,18 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery();
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if ($user && $user->isChefBureau() && $user->bureau_id) {
+            $query->where('bureau_id', $user->bureau_id)
+                  ->where('role', User::ROLE_AGENT);
+        }
+
+        return $query->withCount([
+            'presences as presences_present_count' => fn (Builder $q) => $q->where('statut', \App\Models\Presence::STATUT_PRESENT),
+            'presences as presences_retard_count' => fn (Builder $q) => $q->where('statut', \App\Models\Presence::STATUT_RETARD),
+            'presences as presences_total_count',
+        ]);
     }
 }
