@@ -512,5 +512,29 @@
         .fi-empty-state-heading {
             font-size: 1rem !important;
         }
+
+        /* Widget sections: compact padding on mobile */
+        .fi-wi-widget .fi-section-content {
+            padding: 0.75rem !important;
+        }
+
+        /* Form: DateTimePicker stacked, full width */
+        .fi-fo-component,
+        .fi-fo-field-wrp {
+            width: 100% !important;
+        }
+
+        /* Textarea: smaller height on mobile */
+        .fi-textarea {
+            min-height: 120px !important;
+        }
+
+        /* Cards in widgets: break long words */
+        .fi-wi-widget li,
+        .fi-wi-widget p,
+        .fi-wi-widget div {
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
     }
 </style>

@@ -80,7 +80,7 @@ class AnnonceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('titre')->label('Titre')->searchable()->limit(40),
+                TextColumn::make('titre')->label('Titre')->searchable()->limit(30),
                 TextColumn::make('niveau')
                     ->label('Type')
                     ->badge()
@@ -100,10 +100,12 @@ class AnnonceResource extends Resource
                     ->label('Expire')
                     ->dateTime('d/m/Y H:i')
                     ->placeholder('—')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('createdBy.nom')
                     ->label('Auteur')
-                    ->default('—'),
+                    ->default('—')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
                     ->label('Mise à jour')
                     ->dateTime('d/m/Y H:i')
