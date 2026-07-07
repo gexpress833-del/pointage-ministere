@@ -20,7 +20,7 @@ class BureauForm
                 Select::make('chef_bureau_id')
                     ->label('Chef de bureau')
                     ->relationship(
-                        'chef_bureau_id',
+                        'chefBureau',
                         'name',
                         modifyQueryUsing: fn ($query) => $query->whereIn('role', [User::ROLE_CHEF_BUREAU, User::ROLE_AGENT])
                     )
