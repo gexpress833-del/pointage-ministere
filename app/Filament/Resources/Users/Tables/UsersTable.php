@@ -50,11 +50,38 @@ class UsersTable
             ->recordActions([EditAction::make()])
             ->toolbarActions($canDelete ? [BulkActionGroup::make([
                 DeleteBulkAction::make()
-                    ->action(fn (\Illuminate\Support\Collection $records) => $records->each(function ($record) {
-                        if (! $record->isProtectedAdmin()) {
-                            $record->delete();
+                    ->action(function (\Illuminate\Support\Collection $records) {
+                        $deleted = 0;
+                        $skipped = 0;
+                        $records->each(function ($record) use (&$deleted, &$skipped) {
+                            if (! $record->isProtectedAdmin()) {
+                                $record->delete();
+                                $deleted++;
+                            } else {
+                                $skipped++;
+                            }
+                        });
+
+                        if ($deleted > 0 && $skipped > 0) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Suppression partielle')
+                                ->body("{$deleted} utilisateur(s) supprimé(s). {$skipped} admin principal protégé non supprimé.")
+                                ->warning()
+                                ->send();
+                        } elseif ($deleted > 0) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Utilisateurs supprimés')
+                                ->body("{$deleted} utilisateur(s) supprimé(s) avec succès.")
+                                ->success()
+                                ->send();
+                        } elseif ($skipped > 0) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Aucune suppression')
+                                ->body('L\'administrateur principal ne peut pas être supprimé.')
+                                ->danger()
+                                ->send();
                         }
-                    })),
+                    }),
             ])] : []);
     }
 }

@@ -23,7 +23,13 @@ class EditUser extends EditRecord
 
         return [
             DeleteAction::make()
-                ->hidden(fn () => $this->record->isProtectedAdmin()),
+                ->hidden(fn () => $this->record->isProtectedAdmin())
+                ->successNotification(
+                    \Filament\Notifications\Notification::make()
+                        ->title('Utilisateur supprimé')
+                        ->body('L\'utilisateur a été supprimé avec succès.')
+                        ->success()
+                ),
         ];
     }
 

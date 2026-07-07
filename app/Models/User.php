@@ -114,6 +114,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->email === 'admin@pointage.cd';
     }
 
+    public function isExemptePointage(): bool
+    {
+        return $this->isAdministrateur();
+    }
+
     protected static function booted(): void
     {
         static::deleting(function (User $user) {

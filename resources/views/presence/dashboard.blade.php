@@ -16,6 +16,19 @@
 
         @include('presence.partials.annonces')
 
+        @if($exemptePointage ?? false)
+        <div class="glass rounded-2xl p-4 sm:p-5 border border-blue-400/25">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-300 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
+                </div>
+                <div>
+                    <h2 class="text-white text-base font-bold">Pointage non requis</h2>
+                    <p class="text-slate-400 text-xs mt-1">En tant qu'administrateur, vous êtes exempté du pointage de présence. Vous gérez les sessions et les utilisateurs depuis le panel admin.</p>
+                </div>
+            </div>
+        </div>
+        @else
         <div class="glass rounded-2xl p-4 sm:p-5 border {{ $sessionOuverte ? 'border-green-400/25' : 'border-amber-400/25' }}">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
@@ -44,6 +57,7 @@
                 </span>
             </div>
         </div>
+        @endunless
 
         <div class="glass rounded-2xl p-4 sm:p-5">
             <div class="flex items-start justify-between gap-3 mb-3">
@@ -87,6 +101,20 @@
             </div>
         </div>
 
+        @if($exemptePointage ?? false)
+        <div class="grid gap-3 sm:grid-cols-1">
+            <a href="{{ route('presence.historique') }}"
+               class="glass rounded-2xl p-4 flex flex-col items-start gap-2 border border-slate-500/20 hover:border-slate-400/35 transition group">
+                <div class="w-10 h-10 rounded-xl bg-slate-500/20 flex items-center justify-center text-slate-300 group-hover:bg-slate-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                </div>
+                <div>
+                    <p class="text-white font-semibold text-sm">Historique</p>
+                    <p class="text-slate-400 text-xs mt-0.5">Consulter l'historique des présences</p>
+                </div>
+            </a>
+        </div>
+        @else
         <div class="grid gap-3 sm:grid-cols-2">
             <a href="{{ route('presence.sign') }}"
                class="glass rounded-2xl p-4 flex flex-col items-start gap-2 border transition group {{ $sessionOuverte ? 'border-blue-500/20 hover:border-blue-400/40' : 'border-slate-600/30 opacity-60 pointer-events-none' }}">
@@ -133,6 +161,7 @@
             Pointer mon départ
         </a>
         @endif
+        @endunless
     </main>
 </body>
 </html>

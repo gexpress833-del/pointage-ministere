@@ -39,6 +39,14 @@ class PresenceController extends Controller
     {
         $user = Auth::user();
 
+        if ($user->isExemptePointage()) {
+            return view('presence.sign-blocked', [
+                'raison' => 'exempte',
+                'titre' => 'Pointage non requis',
+                'message' => "En tant qu'administrateur, vous êtes exempté du pointage de présence.",
+            ]);
+        }
+
         if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU, User::ROLE_ADMIN, User::ROLE_SECRETAIRE, User::ROLE_COORDINATEUR], true)) {
             return view('presence.sign-blocked', [
                 'raison' => 'role',
@@ -170,6 +178,7 @@ class PresenceController extends Controller
             'sessionJour' => $sessionJour,
             'sessionOuverte' => $sessionJour?->isOuverte() ?? false,
             'besoinPointerDepart' => $this->besoinPointerDepartPour($user),
+            'exemptePointage' => $user->isExemptePointage(),
         ]);
     }
 
@@ -298,6 +307,10 @@ class PresenceController extends Controller
 
         $user = Auth::user();
 
+        if ($user->isExemptePointage()) {
+            return response()->json(['success' => false, 'message' => 'Vous êtes exempté du pointage.'], 403);
+        }
+
         if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU, User::ROLE_ADMIN, User::ROLE_SECRETAIRE, User::ROLE_COORDINATEUR], true)) {
             return response()->json(['success' => false, 'message' => 'Action non autorisée pour ce rôle.'], 403);
         }
@@ -369,6 +382,10 @@ class PresenceController extends Controller
         $request->validate(['session_id' => 'required|integer']);
 
         $user = Auth::user();
+
+        if ($user->isExemptePointage()) {
+            return response()->json(['success' => false, 'message' => 'Vous êtes exempté du pointage.'], 403);
+        }
 
         if (! in_array($user->role, [User::ROLE_AGENT, User::ROLE_CHEF_BUREAU, User::ROLE_ADMIN, User::ROLE_SECRETAIRE, User::ROLE_COORDINATEUR], true)) {
             return response()->json(['success' => false, 'message' => 'Action non autorisée pour ce rôle.'], 403);

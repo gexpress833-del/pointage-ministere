@@ -68,12 +68,14 @@
         </a>
         <a href="{{ $dashUrl }}"
            class="{{ $linkBase }} {{ $current === 'dashboard' ? $linkActive : $linkIdle }}">
-            Mon pointage
+            {{ $user->isExemptePointage() ? 'Tableau de bord' : 'Mon pointage' }}
         </a>
+        @if(! $user->isExemptePointage())
         <a href="{{ $signUrl }}"
            class="{{ $linkBase }} {{ $current === 'sign' ? $linkActive : $linkIdle }}">
             Signature
         </a>
+        @endif
         <a href="{{ $histUrl }}"
            class="{{ $linkBase }} {{ $current === 'historique' ? $linkActive : $linkIdle }}">
             Historique
