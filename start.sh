@@ -8,6 +8,7 @@ php artisan migrate --force --no-interaction
 # Run seeders
 echo "Running seeders..."
 php artisan db:seed --class=ParametresSeeder --force --no-interaction
+php artisan db:seed --class=AdminSeeder --force --no-interaction
 
 # Create storage link
 echo "Creating storage link..."
