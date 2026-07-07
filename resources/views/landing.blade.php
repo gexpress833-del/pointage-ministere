@@ -58,14 +58,14 @@
 
     {{-- ── Navigation ──────────────────────────────────────── --}}
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200" style="padding-top: env(safe-area-inset-top, 0px);">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <div class="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 min-w-0">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
                     </svg>
                 </div>
-                <span class="font-semibold text-slate-800 text-sm sm:text-base">{{ config('app.name') }}</span>
+                <span class="font-semibold text-slate-800 text-xs sm:text-sm lg:text-base truncate leading-tight">{{ config('app.name') }}</span>
             </div>
             @auth
                 @php
@@ -79,41 +79,41 @@
                         default => '/login',
                     };
                 @endphp
-                <div class="flex items-center gap-1.5 sm:gap-2">
+                <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                     <a href="{{ $dashboardUrl }}"
-                       class="nav-btn inline-flex items-center gap-1.5 sm:gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                       class="nav-btn inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium px-2.5 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
-                        <span class="hidden xs:inline sm:inline">Mon espace</span>
-                        <span class="xs:hidden sm:hidden">Espace</span>
+                        <span class="hidden sm:inline">Mon espace</span>
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                            class="nav-btn inline-flex items-center gap-1.5 sm:gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                            class="nav-btn inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs sm:text-sm font-medium px-2.5 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
+                            aria-label="Se déconnecter" title="Se déconnecter">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M6 18 18 6M6 6l12 12" />
                             </svg>
-                            <span class="hidden xs:inline sm:inline">Déconnexion</span>
-                            <span class="xs:hidden sm:hidden">Sortir</span>
+                            <span class="hidden sm:inline">Déconnexion</span>
                         </button>
                     </form>
                 </div>
             @else
                 <a href="{{ route('login') }}"
-                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                   class="inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium px-2.5 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                     </svg>
-                    Se connecter
+                    <span class="hidden sm:inline">Se connecter</span>
+                    <span class="sm:hidden">Connexion</span>
                 </a>
             @endauth
         </div>
     </nav>
 
     {{-- En-tête institutionnel (Mines / coordination — aligné PDF) --}}
-    <section class="pt-16 bg-white border-b border-slate-200 shadow-sm">
+    <section class="pt-14 sm:pt-16 bg-white border-b border-slate-200 shadow-sm">
         <x-official-institutional-header />
     </section>
 
