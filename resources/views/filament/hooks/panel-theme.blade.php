@@ -16,14 +16,75 @@
     .fi-sidebar,
     .fi-sidebar-nav {
         background: #0f172a !important;
-        border-color: rgba(148, 163, 184, 0.16) !important;
+        border-color: rgba(59, 130, 246, 0.15) !important;
+    }
+
+    /* Sidebar items: ensure visible text */
+    .fi-sidebar-item-button {
+        color: #cbd5e1 !important;
+    }
+
+    .fi-sidebar-item-button:hover {
+        color: #ffffff !important;
+    }
+
+    .fi-sidebar-item-label {
+        color: #cbd5e1 !important;
+        font-weight: 500 !important;
+    }
+
+    .fi-sidebar-item-active .fi-sidebar-item-label {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    .fi-sidebar-group-label {
+        color: #64748b !important;
+        text-transform: uppercase !important;
+        font-size: 0.7rem !important;
+        letter-spacing: 0.05em !important;
     }
 
     .fi-sidebar-header,
     .fi-topbar nav,
     .fi-topbar {
-        background: rgba(15, 23, 42, 0.92) !important;
-        border-color: rgba(148, 163, 184, 0.16) !important;
+        background: rgba(15, 23, 42, 0.97) !important;
+        border-color: rgba(59, 130, 246, 0.25) !important;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    /* Topbar text + icons: ensure visible */
+    .fi-topbar,
+    .fi-topbar * {
+        color: #e2e8f0 !important;
+    }
+
+    .fi-topbar .fi-brand-name,
+    .fi-topbar .fi-logo-text {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    .fi-topbar .fi-icon-btn,
+    .fi-topbar .fi-icon-btn svg {
+        color: #cbd5e1 !important;
+    }
+
+    .fi-topbar .fi-icon-btn:hover,
+    .fi-topbar .fi-icon-btn:hover svg {
+        color: #ffffff !important;
+    }
+
+    /* Search bar in topbar: visible */
+    .fi-topbar .fi-input-wrp,
+    .fi-topbar .fi-input {
+        background: rgba(30, 41, 59, 0.6) !important;
+        border: 1px solid rgba(148, 163, 184, 0.2) !important;
+        color: #e2e8f0 !important;
+    }
+
+    .fi-topbar .fi-input::placeholder {
+        color: #94a3b8 !important;
     }
 
     .fi-section,
@@ -69,8 +130,9 @@
 
     .fi-sidebar-item-active > .fi-sidebar-item-button,
     .fi-sidebar-item-button:hover {
-        background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(14, 165, 233, 0.12)) !important;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(14, 165, 233, 0.15)) !important;
         color: #fff !important;
+        border-left: 3px solid #3b82f6 !important;
     }
 
     .fi-logo,
@@ -307,13 +369,26 @@
     }
 
     /* === Responsive tables Filament : scroll horizontal sur mobile === */
-    .fi-ta-ctn {
+    .fi-ta-ctn,
+    .fi-ta-content,
+    .fi-ta-container,
+    .fi-ta-table-ctn,
+    .fi-ta-table-container {
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
     .fi-ta {
         min-width: 500px !important;
+        width: 100% !important;
+        table-layout: auto !important;
+    }
+
+    .fi-ta-header-cell,
+    .fi-ta-cell {
+        white-space: nowrap !important;
     }
 
     @media (max-width: 640px) {
@@ -333,7 +408,13 @@
             grid-template-columns: 1fr !important;
         }
 
-        /* Page heading smaller on mobile */
+        /* Page header: stack heading + actions on mobile */
+        .fi-page-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.75rem !important;
+        }
+
         .fi-page-header-heading {
             font-size: 1.1rem !important;
         }
@@ -356,6 +437,28 @@
         /* Relation manager tabs scrollable */
         .fi-relation-manager-tabs {
             overflow-x: auto !important;
+        }
+
+        /* Table actions (Créer + Rechercher) stack on mobile */
+        .fi-ta-header-toolbar {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0.5rem !important;
+        }
+
+        .fi-ta-header-toolbar > * {
+            width: 100% !important;
+            justify-content: stretch !important;
+        }
+
+        .fi-ta-header-toolbar .fi-input-wrp {
+            width: 100% !important;
+        }
+
+        .fi-ta-header-toolbar input,
+        .fi-ta-header-toolbar .fi-btn {
+            width: 100% !important;
+            justify-content: center !important;
         }
     }
 
@@ -385,5 +488,21 @@
         min-height: 44px !important;
         min-width: 44px !important;
         touch-action: manipulation !important;
+    }
+
+    /* === Modal / empty-state centered on mobile === */
+    @media (max-width: 640px) {
+        .fi-modal-window {
+            max-width: calc(100vw - 1rem) !important;
+            margin: 0.5rem !important;
+        }
+
+        .fi-empty-state {
+            padding: 1.5rem 1rem !important;
+        }
+
+        .fi-empty-state-heading {
+            font-size: 1rem !important;
+        }
     }
 </style>
