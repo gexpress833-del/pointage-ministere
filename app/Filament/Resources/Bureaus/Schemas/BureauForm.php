@@ -20,7 +20,9 @@ class BureauForm
                 Select::make('chef_bureau_id')
                     ->label('Chef de bureau')
                     ->relationship(
-                        query: fn ($query) => $query->whereIn('role', [User::ROLE_CHEF_BUREAU, User::ROLE_AGENT])
+                        'chef_bureau_id',
+                        'name',
+                        modifyQueryUsing: fn ($query) => $query->whereIn('role', [User::ROLE_CHEF_BUREAU, User::ROLE_AGENT])
                     )
                     ->getOptionLabelFromRecordUsing(fn (User $record) => $record->getDisplayName().' ('.$record->matricule.')')
                     ->searchable()
