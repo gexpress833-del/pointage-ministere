@@ -6,6 +6,7 @@ use App\Filament\Resources\Presences\Pages\ListPresences;
 use App\Models\Presence;
 use App\Models\User;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
@@ -141,6 +142,11 @@ class PresenceResource extends Resource
                         Presence::STATUT_PRESENT => 'Présent',
                         Presence::STATUT_RETARD => 'Retard',
                     ]),
+                SelectFilter::make('user_id')
+                    ->label('Agent')
+                    ->relationship('user', 'nom')
+                    ->searchable()
+                    ->preload(),
                 Filter::make('date')
                     ->label('Date')
                     ->form([
@@ -156,7 +162,16 @@ class PresenceResource extends Resource
                         );
                     }),
             ])
-            ->paginated([25, 50, 100]);
+            ->paginated([25, 50, 100])
+            ->recordActions([
+                Action::make('pdf_agent')
+                    ->label('PDF agent')
+                    ->icon(Heroicon::OutlinedArrowDownTray)
+                    ->color('gray')
+                    ->visible(fn () => Auth::user()?->isAdministrateur())
+                    ->url(fn (Presence $record) => route('reports.user', ['user' => $record->user_id]))
+                    ->openUrlInNewTab(),
+            ]);
     }
 
     public static function getPages(): array

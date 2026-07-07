@@ -59,6 +59,11 @@ class SessionPresenceResource extends Resource
                             'closed_by' => Auth::id(),
                             'closed_at' => now(),
                         ]);
+                        \Filament\Notifications\Notification::make()
+                            ->title('Session fermée')
+                            ->body('La session du '.$record->date->format('d/m/Y').' a été fermée avec succès.')
+                            ->success()
+                            ->send();
                     })
                     ->requiresConfirmation(),
                 Action::make('pdf')

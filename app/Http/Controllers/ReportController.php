@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SessionPresence;
+use App\Models\User;
 use App\Services\PresenceReportPdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,27 @@ class ReportController extends Controller
             (int) $request->month,
             $bureauId
         );
+    }
+
+    public function userPdf(Request $request, User $user)
+    {
+        $this->authorizeViewReport();
+
+        return app(PresenceReportPdf::class)->userReport(
+            $user,
+            $request->get('start'),
+            $request->get('end')
+        );
+    }
+
+    public function datePdf(Request $request)
+    {
+        $this->authorizeViewReport();
+        $request->validate([
+            'date' => 'required|date|date_format:Y-m-d',
+        ]);
+
+        return app(PresenceReportPdf::class)->dateReport($request->date);
     }
 
     private function authorizeViewReport(): void

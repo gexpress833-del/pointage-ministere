@@ -41,5 +41,7 @@ Route::middleware(['auth', 'password.force'])->prefix('presence')->name('presenc
 Route::middleware(['auth', 'password.force'])->group(function () {
     Route::get('/reports/daily/{session}', [ReportController::class, 'dailyPdf'])->name('reports.daily');
     Route::get('/reports/monthly', [ReportController::class, 'monthlyPdf'])->name('reports.monthly');
+    Route::get('/reports/user/{user}', [ReportController::class, 'userPdf'])->name('reports.user');
+    Route::get('/reports/date', [ReportController::class, 'datePdf'])->name('reports.date');
     Route::get('/users/{user}/photo-reference', [UserPhotoController::class, 'show'])->name('users.photo-reference');
 });

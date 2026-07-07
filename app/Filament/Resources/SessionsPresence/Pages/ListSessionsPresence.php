@@ -29,6 +29,11 @@ class ListSessionsPresence extends ListRecords
                 ->action(function () {
                     $today = Carbon::today();
                     if (SessionPresence::where('date', $today)->exists()) {
+                        \Filament\Notifications\Notification::make()
+                            ->title('Session existante')
+                            ->body('Une session existe déjà pour aujourd\'hui.')
+                            ->warning()
+                            ->send();
                         return;
                     }
                     SessionPresence::create([
@@ -36,6 +41,11 @@ class ListSessionsPresence extends ListRecords
                         'statut' => SessionPresence::STATUT_OUVERTE,
                         'opened_by' => Auth::id(),
                     ]);
+                    \Filament\Notifications\Notification::make()
+                        ->title('Session ouverte')
+                        ->body('La session de présence pour aujourd\'hui a été ouverte avec succès.')
+                        ->success()
+                        ->send();
                 }),
 
             Action::make('rapport_mensuel')
