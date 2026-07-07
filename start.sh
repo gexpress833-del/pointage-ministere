@@ -27,6 +27,9 @@ php artisan storage:link || true
 # Ensure storage directories exist and are writable
 echo "Ensuring storage directories..."
 mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs
+mkdir -p storage/app/private storage/app/private/photos_reference
+mkdir -p storage/app/livewire-tmp
+mkdir -p storage/app/public
 chmod -R 775 storage bootstrap/cache
 
 # Cache config, routes, views (non-fatal)

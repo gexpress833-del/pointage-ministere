@@ -35,8 +35,13 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-di
 RUN npm ci
 RUN npm run build
 
-# Set permissions
+# Set permissions and create storage directories
+RUN mkdir -p storage/app/private storage/app/private/photos_reference \
+    storage/app/livewire-tmp storage/app/public \
+    storage/framework/sessions storage/framework/views storage/framework/cache \
+    storage/logs
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Copy start script
 COPY start.sh /usr/local/bin/start.sh
