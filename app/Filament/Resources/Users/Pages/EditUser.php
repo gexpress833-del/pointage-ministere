@@ -57,4 +57,17 @@ class EditUser extends EditRecord
 
         return $data;
     }
+
+    protected function getSavedNotification(): ?\Filament\Notifications\Notification
+    {
+        return \Filament\Notifications\Notification::make()
+            ->title('Utilisateur modifié avec succès')
+            ->body('Les modifications ont été enregistrées.')
+            ->success();
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

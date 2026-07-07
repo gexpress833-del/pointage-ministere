@@ -49,11 +49,36 @@ class CreateUser extends CreateRecord
     {
         if ($this->tempPassword) {
             \Filament\Notifications\Notification::make()
-                ->title('Utilisateur créé')
+                ->title('Utilisateur créé avec succès')
                 ->body("Mot de passe temporaire : {$this->tempPassword} — L'utilisateur devra le changer à sa première connexion.")
                 ->success()
                 ->persistent()
                 ->send();
+        } else {
+            \Filament\Notifications\Notification::make()
+                ->title('Utilisateur créé avec succès')
+                ->body('L\'utilisateur a été ajouté à la liste.')
+                ->success()
+                ->send();
         }
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getFormActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('create')
+                ->label('Créer l\'utilisateur')
+                ->submit('create')
+                ->keyBindings(['cmd+s', 'ctrl+s']),
+            \Filament\Actions\Action::make('cancel')
+                ->label('Annuler')
+                ->url($this->getResource()::getUrl('index'))
+                ->color('gray'),
+        ];
     }
 }
