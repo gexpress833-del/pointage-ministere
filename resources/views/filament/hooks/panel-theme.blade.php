@@ -381,11 +381,59 @@
     .fi-ta-content,
     .fi-ta-container,
     .fi-ta-table-ctn,
-    .fi-ta-table-container {
+    .fi-ta-table-container,
+    .fi-ta-wrp,
+    .fi-ta-scroll-ctn {
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
         width: 100% !important;
         max-width: 100% !important;
+        display: block !important;
+    }
+
+    /* Scrollbar visible pour les tables Filament */
+    .fi-ta-ctn::-webkit-scrollbar,
+    .fi-ta-content::-webkit-scrollbar,
+    .fi-ta-container::-webkit-scrollbar,
+    .fi-ta-wrp::-webkit-scrollbar,
+    .fi-ta-scroll-ctn::-webkit-scrollbar {
+        height: 8px !important;
+        -webkit-appearance: none !important;
+    }
+
+    .fi-ta-ctn::-webkit-scrollbar-track,
+    .fi-ta-content::-webkit-scrollbar-track,
+    .fi-ta-container::-webkit-scrollbar-track,
+    .fi-ta-wrp::-webkit-scrollbar-track,
+    .fi-ta-scroll-ctn::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.5) !important;
+        border-radius: 4px !important;
+    }
+
+    .fi-ta-ctn::-webkit-scrollbar-thumb,
+    .fi-ta-content::-webkit-scrollbar-thumb,
+    .fi-ta-container::-webkit-scrollbar-thumb,
+    .fi-ta-wrp::-webkit-scrollbar-thumb,
+    .fi-ta-scroll-ctn::-webkit-scrollbar-thumb {
+        background: rgba(59, 130, 246, 0.5) !important;
+        border-radius: 4px !important;
+    }
+
+    .fi-ta-ctn::-webkit-scrollbar-thumb:hover,
+    .fi-ta-content::-webkit-scrollbar-thumb:hover,
+    .fi-ta-container::-webkit-scrollbar-thumb:hover,
+    .fi-ta-wrp::-webkit-scrollbar-thumb:hover,
+    .fi-ta-scroll-ctn::-webkit-scrollbar-thumb:hover {
+        background: rgba(59, 130, 246, 0.7) !important;
+    }
+
+    .fi-ta-ctn,
+    .fi-ta-content,
+    .fi-ta-container,
+    .fi-ta-wrp,
+    .fi-ta-scroll-ctn {
+        scrollbar-width: auto !important;
+        scrollbar-color: rgba(59, 130, 246, 0.5) rgba(15, 23, 42, 0.5) !important;
     }
 
     .fi-ta {
