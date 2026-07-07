@@ -35,10 +35,6 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-di
 RUN npm ci
 RUN npm run build
 
-# Cache routes and views (config:cache sera fait au runtime avec les env vars)
-RUN php artisan route:cache
-RUN php artisan view:cache
-
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 

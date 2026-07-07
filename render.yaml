@@ -39,7 +39,7 @@ services:
       - key: FILESYSTEM_DISK
         value: local
       - key: APP_KEY
-        generateValue: true
+        sync: false
       - key: APP_URL
         sync: false
       - key: IMAGEKIT_PUBLIC_KEY
