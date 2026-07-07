@@ -34,16 +34,16 @@
         <div class="blob w-96 h-96 bg-blue-300 top-0 -left-20"></div>
         <div class="blob w-80 h-80 bg-indigo-400 bottom-0 right-0" style="animation-delay:3s"></div>
 
-        <div class="relative w-full max-w-md fade-in">
-            <div class="bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
+        <div class="relative w-full max-w-md fade-in px-2 sm:px-0">
+            <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10">
 
-                <div class="flex flex-col items-center mb-8">
-                    <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <div class="flex flex-col items-center mb-6 sm:mb-8">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
                         </svg>
                     </div>
-                    <h1 class="text-2xl font-bold text-slate-800">Connexion</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Connexion</h1>
                     <p class="text-slate-500 text-sm mt-1">Accédez à votre espace personnel</p>
                 </div>
 
@@ -61,18 +61,18 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login.submit') }}" class="space-y-5">
+                <form method="POST" action="{{ route('login.submit') }}" class="space-y-4 sm:space-y-5">
                     @csrf
                     <div>
                         <label for="login" class="block text-sm font-medium text-slate-700 mb-1.5">Email ou téléphone</label>
                         <input type="text" id="login" name="login" value="{{ old('login') }}" required autofocus
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition min-h-[48px]"
                             placeholder="vous@exemple.cd ou +243..." />
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-slate-700 mb-1.5">Mot de passe</label>
                         <input type="password" id="password" name="password" required
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition min-h-[48px]"
                             placeholder="••••••••" />
                     </div>
                     <div class="flex items-center gap-2">
@@ -80,7 +80,7 @@
                         <label for="remember" class="text-sm text-slate-600">Se souvenir de moi</label>
                     </div>
                     <button type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all text-sm">
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base min-h-[48px]">
                         Se connecter
                     </button>
                 </form>

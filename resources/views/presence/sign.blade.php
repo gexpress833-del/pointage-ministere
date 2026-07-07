@@ -76,13 +76,13 @@
     </header>
 
     {{-- Contenu principal --}}
-    <main class="flex-1 flex flex-col items-center justify-start p-4 gap-4 max-w-lg mx-auto w-full min-w-0" style="padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));">
+    <main class="flex-1 flex flex-col items-center justify-start p-3 sm:p-4 gap-4 max-w-lg mx-auto w-full min-w-0" style="padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));">
 
         @include('presence.partials.annonces', ['annoncesVariant' => 'plain'])
 
         {{-- Carte infos utilisateur --}}
-        <div class="w-full bg-white rounded-2xl shadow p-4 flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-blue-100">
+        <div class="w-full bg-white rounded-2xl shadow p-3 sm:p-4 flex items-center gap-3">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-blue-100">
                 @if(!empty($agentPhotoUrl))
                     <img
                         src="{{ $agentPhotoUrl }}"
@@ -90,7 +90,7 @@
                         class="w-full h-full object-cover"
                     >
                 @else
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
                 @endif
@@ -103,14 +103,14 @@
 
         {{-- Étape 1 : bouton lancer le scan --}}
         <div id="stepStart" class="w-full">
-            <div class="bg-white rounded-2xl shadow p-5 text-center space-y-4">
-                <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <div class="bg-white rounded-2xl shadow p-4 sm:p-5 text-center space-y-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:w-9 sm:h-9 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5 20.47 5m0 0H15m5.47 0v5M4.5 19.5l-.53-.53m0 0-3.53-3.53m3.53 3.53 3.53-3.53m-7.06-7.06 3.53 3.53m0 0L8 16m-4-4.47L8.5 8.03" />
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-lg font-bold text-gray-800">
+                    <h2 class="text-base sm:text-lg font-bold text-gray-800">
                         @if(($signMode ?? 'arrival') === 'departure')
                             Pointer mon départ
                         @else
@@ -173,20 +173,20 @@
 
         {{-- Succès --}}
         <div id="stepSuccess" class="hidden w-full">
-            <div class="bg-white rounded-2xl shadow p-6 text-center space-y-4">
-                <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center pulse-green">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="bg-white rounded-2xl shadow p-5 sm:p-6 text-center space-y-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center pulse-green">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:w-9 sm:h-9 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-green-700" id="successTitle">{{ ($signMode ?? 'arrival') === 'departure' ? 'Départ enregistré' : 'Présence enregistrée' }}</h2>
+                    <h2 class="text-lg sm:text-xl font-bold text-green-700" id="successTitle">{{ ($signMode ?? 'arrival') === 'departure' ? 'Départ enregistré' : 'Présence enregistrée' }}</h2>
                     <p class="text-sm text-gray-500 mt-1" id="heureEnregistree"></p>
                 </div>
                 {{-- Aperçu de la photo capturée --}}
                 <div class="flex justify-center">
                     <img id="capturePreview"
-                        class="hidden w-28 h-28 object-cover rounded-full border-4 border-green-300 shadow"
+                        class="hidden w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-full border-4 border-green-300 shadow"
                         alt="Photo de signature">
                 </div>
                 <p class="text-xs text-gray-400">Photo enregistrée comme preuve de présence</p>

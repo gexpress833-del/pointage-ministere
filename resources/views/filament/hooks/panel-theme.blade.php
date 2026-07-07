@@ -305,4 +305,85 @@
             font-size: 0.9rem !important;
         }
     }
+
+    /* === Responsive tables Filament : scroll horizontal sur mobile === */
+    .fi-ta-ctn {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .fi-ta {
+        min-width: 500px !important;
+    }
+
+    @media (max-width: 640px) {
+        .fi-ta-header-cell,
+        .fi-ta-cell {
+            padding: 0.5rem 0.625rem !important;
+            font-size: 0.8rem !important;
+        }
+
+        .fi-ta-header-cell .fi-ta-header-cell-label {
+            font-size: 0.75rem !important;
+        }
+
+        /* Form Filament: stacked layout on mobile */
+        .fi-fo-grid-cols-2,
+        .fi-fo-grid-cols-3 {
+            grid-template-columns: 1fr !important;
+        }
+
+        /* Page heading smaller on mobile */
+        .fi-page-header-heading {
+            font-size: 1.1rem !important;
+        }
+
+        /* Section padding tighter on mobile */
+        .fi-section-content {
+            padding: 0.75rem !important;
+        }
+
+        /* Notifications/Alerts */
+        .fi-notification {
+            max-width: calc(100vw - 2rem) !important;
+        }
+
+        /* Breadcrumbs hidden on very small screens */
+        .fi-breadcrumbs {
+            display: none !important;
+        }
+
+        /* Relation manager tabs scrollable */
+        .fi-relation-manager-tabs {
+            overflow-x: auto !important;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .fi-page-header-heading {
+            font-size: 1rem !important;
+        }
+
+        .fi-btn {
+            font-size: 0.8rem !important;
+            padding: 0.5rem 0.75rem !important;
+        }
+    }
+
+    /* === Tablet improvements === */
+    @media (min-width: 641px) and (max-width: 1023px) {
+        .fi-ta {
+            min-width: 600px !important;
+        }
+    }
+
+    /* === Touch targets: ensure 44px minimum === */
+    .fi-btn,
+    .fi-icon-btn,
+    .fi-topbar-open-sidebar-btn button,
+    .fi-topbar-close-sidebar-btn button {
+        min-height: 44px !important;
+        min-width: 44px !important;
+        touch-action: manipulation !important;
+    }
 </style>

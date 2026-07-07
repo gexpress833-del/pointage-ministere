@@ -13,6 +13,13 @@
             padding: 0 !important;
         }
 
+        /* Responsive: ajustements petits écrans */
+        @media (max-width: 380px) {
+            .hero-title { font-size: 2rem !important; line-height: 1.1 !important; }
+            .hero-subtitle { font-size: 0.95rem !important; }
+            .nav-btn { padding: 0.5rem 0.75rem !important; font-size: 0.8rem !important; }
+        }
+
         .gradient-bg {
             background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 50%, #1e40af 100%);
         }
@@ -72,22 +79,24 @@
                         default => '/login',
                     };
                 @endphp
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5 sm:gap-2">
                     <a href="{{ $dashboardUrl }}"
-                       class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                       class="nav-btn inline-flex items-center gap-1.5 sm:gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                         </svg>
-                        Mon espace
+                        <span class="hidden xs:inline sm:inline">Mon espace</span>
+                        <span class="xs:hidden sm:hidden">Espace</span>
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                            class="inline-flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            class="nav-btn inline-flex items-center gap-1.5 sm:gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M6 18 18 6M6 6l12 12" />
                             </svg>
-                            Déconnexion
+                            <span class="hidden xs:inline sm:inline">Déconnexion</span>
+                            <span class="xs:hidden sm:hidden">Sortir</span>
                         </button>
                     </form>
                 </div>
@@ -123,12 +132,12 @@
                         <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                         Coordination Sous-Provinciale — RDC
                     </div>
-                    <h1 class="fade-in delay-1 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                    <h1 class="hero-title fade-in delay-1 text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 sm:mb-6">
                         Gestion de<br>
                         <span class="text-sky-300">présence</span><br>
                         biométrique
                     </h1>
-                    <p class="fade-in delay-2 text-lg text-blue-100 leading-relaxed mb-8 max-w-lg">
+                    <p class="hero-subtitle fade-in delay-2 text-base sm:text-lg text-blue-100 leading-relaxed mb-6 sm:mb-8 max-w-lg">
                         Système de pointage par reconnaissance faciale. Sécurisé, rapide et fiable pour tous les agents et bureaux.
                     </p>
                     <div class="fade-in delay-3 flex flex-col sm:flex-row gap-3">
@@ -202,7 +211,7 @@
                 <p class="text-slate-500 max-w-xl mx-auto">Un flux simple et sécurisé pour gérer la présence de tous les agents.</p>
             </div>
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 @foreach([
                     ['bg-blue-50','text-blue-600','M2.25 6.375c0-1.035.84-1.875 1.875-1.875h16.5c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H4.125A1.875 1.875 0 0 1 2.25 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Z','Ouverture de session','L\'administrateur ouvre une session de présence chaque matin depuis le tableau de bord.'],
                     ['bg-violet-50','text-violet-600','M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z','Reconnaissance faciale','L\'agent se connecte et laisse la caméra identifier son visage automatiquement.'],

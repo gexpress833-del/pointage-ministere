@@ -22,7 +22,8 @@ class EditUser extends EditRecord
         }
 
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->hidden(fn () => $this->record->isProtectedAdmin()),
         ];
     }
 

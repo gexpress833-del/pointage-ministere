@@ -48,6 +48,13 @@ class UsersTable
             ])
             ->filters([])
             ->recordActions([EditAction::make()])
-            ->toolbarActions($canDelete ? [BulkActionGroup::make([DeleteBulkAction::make()])] : []);
+            ->toolbarActions($canDelete ? [BulkActionGroup::make([
+                DeleteBulkAction::make()
+                    ->action(fn (\Illuminate\Support\Collection $records) => $records->each(function ($record) {
+                        if (! $record->isProtectedAdmin()) {
+                            $record->delete();
+                        }
+                    })),
+            ])] : []);
     }
 }

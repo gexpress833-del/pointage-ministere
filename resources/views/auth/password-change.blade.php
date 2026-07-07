@@ -20,16 +20,16 @@
 <body class="m-0 p-0 bg-slate-50 min-h-screen min-h-dvh overflow-x-hidden antialiased">
 
     <div class="gradient-bg relative min-h-screen flex items-center justify-center overflow-hidden px-4">
-        <div class="relative w-full max-w-md fade-in">
-            <div class="bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
+        <div class="relative w-full max-w-md fade-in px-2 sm:px-0">
+            <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10">
 
-                <div class="flex flex-col items-center mb-8">
-                    <div class="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <div class="flex flex-col items-center mb-6 sm:mb-8">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                         </svg>
                     </div>
-                    <h1 class="text-2xl font-bold text-slate-800">Changer le mot de passe</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Changer le mot de passe</h1>
                     <p class="text-slate-500 text-sm mt-1 text-center">Pour votre sécurité, vous devez définir un nouveau mot de passe avant de continuer.</p>
                 </div>
 
@@ -47,29 +47,23 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.change.submit') }}" class="space-y-5">
+                <form method="POST" action="{{ route('password.change.submit') }}" class="space-y-4 sm:space-y-5">
                     @csrf
-                    <div>
-                        <label for="current_password" class="block text-sm font-medium text-slate-700 mb-1.5">Mot de passe actuel</label>
-                        <input type="password" id="current_password" name="current_password" required
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
-                            placeholder="••••••••" />
-                    </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-slate-700 mb-1.5">Nouveau mot de passe</label>
                         <input type="password" id="password" name="password" required
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition min-h-[48px]"
                             placeholder="••••••••" />
                         <p class="text-xs text-slate-400 mt-1">Min. 8 caractères, majuscules, minuscules et chiffres.</p>
                     </div>
                     <div>
                         <label for="password_confirmation" class="block text-sm font-medium text-slate-700 mb-1.5">Confirmer le nouveau mot de passe</label>
                         <input type="password" id="password_confirmation" name="password_confirmation" required
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition min-h-[48px]"
                             placeholder="••••••••" />
                     </div>
                     <button type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all text-sm">
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base min-h-[48px]">
                         Changer le mot de passe
                     </button>
                 </form>

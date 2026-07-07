@@ -108,4 +108,18 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->nom ?? $this->name ?? $this->email;
     }
+
+    public function isProtectedAdmin(): bool
+    {
+        return $this->email === 'admin@pointage.cd';
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            if ($user->isProtectedAdmin()) {
+                throw new \Exception('L\'administrateur principal ne peut pas être supprimé.');
+            }
+        });
+    }
 }
