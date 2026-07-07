@@ -53,9 +53,8 @@
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35) !important;
     }
 
-    /* Topbar text + icons: ensure visible */
-    .fi-topbar,
-    .fi-topbar * {
+    /* Topbar text + icons: ensure visible (targeted, not global *) */
+    .fi-topbar {
         color: #e2e8f0 !important;
     }
 
@@ -65,14 +64,17 @@
         font-weight: 700 !important;
     }
 
-    .fi-topbar .fi-icon-btn,
-    .fi-topbar .fi-icon-btn svg {
+    .fi-topbar .fi-icon-btn {
         color: #cbd5e1 !important;
     }
 
-    .fi-topbar .fi-icon-btn:hover,
-    .fi-topbar .fi-icon-btn:hover svg {
+    .fi-topbar .fi-icon-btn:hover {
         color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .fi-topbar .fi-icon-btn svg {
+        color: inherit !important;
     }
 
     /* Search bar in topbar: visible */
@@ -85,6 +87,12 @@
 
     .fi-topbar .fi-input::placeholder {
         color: #94a3b8 !important;
+    }
+
+    /* Topbar buttons: keep their own colors (don't override) */
+    .fi-topbar .fi-btn-color-primary {
+        background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+        color: #fff !important;
     }
 
     .fi-section,
@@ -132,7 +140,7 @@
     .fi-sidebar-item-button:hover {
         background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(14, 165, 233, 0.15)) !important;
         color: #fff !important;
-        border-left: 3px solid #3b82f6 !important;
+        box-shadow: inset 3px 0 0 #3b82f6 !important;
     }
 
     .fi-logo,
