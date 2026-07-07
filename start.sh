@@ -24,6 +24,11 @@ php artisan db:seed --class=AdminSeeder --force --no-interaction || echo "WARNIN
 echo "Creating storage link..."
 php artisan storage:link || true
 
+# Ensure storage directories exist and are writable
+echo "Ensuring storage directories..."
+mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs
+chmod -R 775 storage bootstrap/cache
+
 # Cache config, routes, views (non-fatal)
 echo "Caching config..."
 php artisan config:cache || echo "WARNING: config:cache failed, continuing..."
