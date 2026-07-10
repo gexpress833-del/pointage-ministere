@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
     <title>Connexion — {{ config('app.name') }}</title>
     <x-vite-tailwind />
     <style>
@@ -38,10 +39,9 @@
             <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10">
 
                 <div class="flex flex-col items-center mb-6 sm:mb-8">
-                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-3 sm:mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                        </svg>
+                    <div class="flex items-center gap-3 mb-3 sm:mb-4">
+                        <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain">
+                        <img src="{{ asset('Drapeaux_rdc.webp') }}" alt="Drapeau RDC" class="w-10 h-7 sm:w-12 sm:h-8 object-cover rounded">
                     </div>
                     <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Connexion</h1>
                     <p class="text-slate-500 text-sm mt-1">Accédez à votre espace personnel</p>
@@ -92,9 +92,12 @@
                 </div>
             </div>
 
-            <p class="text-center text-blue-100 text-xs mt-6">
-                Coordination Sous-Provinciale · République Démocratique du Congo
-            </p>
+            <div class="flex items-center justify-center gap-2 mt-6">
+                <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-6 h-6 object-contain">
+                <p class="text-center text-blue-100 text-xs">
+                    Coordination Sous-Provinciale · République Démocratique du Congo
+                </p>
+            </div>
         </div>
     </div>
 

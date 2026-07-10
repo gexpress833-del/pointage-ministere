@@ -148,7 +148,7 @@
     <div class="qa-card">
         <div class="qa-header">
             <div class="qa-user">
-                <div class="qa-avatar">{{ mb_substr($user?->getDisplayName() ?? '?', 0, 2) }}</div>
+                <div class="qa-avatar"><img src="{{ asset('logo3.png') }}" alt="Logo" class="w-full h-full object-contain rounded-full"></div>
                 <div style="min-width: 0;">
                     <p class="qa-name">{{ $user?->getDisplayName() }}</p>
                     <p class="qa-role">

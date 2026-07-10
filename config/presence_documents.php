@@ -11,9 +11,9 @@
  */
 return [
 
-    'logo_left' => env('DOCUMENT_LOGO_LEFT', 'images/official/logo-left.png'),
+    'logo_left' => env('DOCUMENT_LOGO_LEFT', 'logo3.png'),
 
-    'logo_right' => env('DOCUMENT_LOGO_RIGHT', 'images/official/armoiries-rdc.png'),
+    'logo_right' => env('DOCUMENT_LOGO_RIGHT', 'Drapeaux_rdc.webp'),
 
     'line1' => env('DOCUMENT_HEADER_L1', 'République Démocratique du Congo'),
 

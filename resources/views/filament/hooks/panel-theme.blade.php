@@ -1,3 +1,4 @@
+<link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
 <style>
     /* Thème sombre — styles ciblés (sans écraser tous les composants Filament) */
     body.fi-body,

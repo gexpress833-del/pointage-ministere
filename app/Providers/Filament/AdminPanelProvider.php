@@ -38,6 +38,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName(config('app.name'))
+            ->brandLogo(fn () => '<img src="'.asset('logo3.png').'" alt="Logo" class="h-8 w-auto object-contain">')
+            ->darkModeBrandLogo(fn () => '<img src="'.asset('logo3.png').'" alt="Logo" class="h-8 w-auto object-contain">')
             ->colors([
                 'primary' => Color::Blue,
             ])
