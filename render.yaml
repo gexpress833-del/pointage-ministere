@@ -48,6 +48,20 @@ services:
         sync: false
       - key: IMAGEKIT_URL_ENDPOINT
         sync: false
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        value: smtp-relay.brevo.com
+      - key: MAIL_PORT
+        value: "587"
+      - key: MAIL_USERNAME
+        value: b19ec5001@smtp-brevo.com
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_FROM_ADDRESS
+        value: noreply@pointage.cd
+      - key: MAIL_FROM_NAME
+        value: "${APP_NAME}"
 
   - type: cron
     name: pointage-scheduler
@@ -96,6 +110,20 @@ services:
         sync: false
       - key: IMAGEKIT_URL_ENDPOINT
         sync: false
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        value: smtp-relay.brevo.com
+      - key: MAIL_PORT
+        value: "587"
+      - key: MAIL_USERNAME
+        value: b19ec5001@smtp-brevo.com
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_FROM_ADDRESS
+        value: noreply@pointage.cd
+      - key: MAIL_FROM_NAME
+        value: "${APP_NAME}"
 
 databases:
   - name: pointage-db
