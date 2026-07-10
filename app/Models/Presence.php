@@ -10,7 +10,7 @@ class Presence extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['session_id', 'user_id', 'heure_arrivee', 'heure_depart', 'photo_capture', 'statut'];
+    protected $fillable = ['session_id', 'user_id', 'heure_arrivee', 'heure_depart', 'heure_supplementaire', 'type_depart', 'photo_capture', 'statut'];
 
     protected function casts(): array
     {
@@ -22,6 +22,10 @@ class Presence extends Model
     public const STATUT_RETARD = 'retard';
 
     public const STATUT_ABSENT = 'absent';
+
+    public const DEPART_NORMAL = 'normal';
+
+    public const DEPART_SUPPLEMENTAIRE = 'supplementaire';
 
     public function session(): BelongsTo
     {

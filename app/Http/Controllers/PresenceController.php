@@ -352,10 +352,30 @@ class PresenceController extends Controller
         }
 
         $heureArrivee = Carbon::now();
-        $heureLimiteStr = Parametre::heureLimiteRetard();
-        $heureLimiteRetard = substr_count($heureLimiteStr, ':') >= 2
-            ? $session->date->copy()->setTimeFromTimeString($heureLimiteStr)
-            : $session->date->copy()->setTimeFromTimeString($heureLimiteStr.':00');
+        $todayDate = $session->date->copy();
+
+        // Fenêtre d'arrivée : 07:59 – 11:59
+        $heureOuvertureStr = Parametre::heureOuvertureSession();
+        $heureFinArriveeStr = Parametre::heureFinArrivee();
+        $heureLimiteRetardStr = Parametre::heureLimiteRetard();
+
+        $heureOuverture = $todayDate->copy()->setTimeFromTimeString(
+            substr_count($heureOuvertureStr, ':') >= 2 ? $heureOuvertureStr : $heureOuvertureStr.':00'
+        );
+        $heureFinArrivee = $todayDate->copy()->setTimeFromTimeString(
+            substr_count($heureFinArriveeStr, ':') >= 2 ? $heureFinArriveeStr : $heureFinArriveeStr.':00'
+        );
+        $heureLimiteRetard = $todayDate->copy()->setTimeFromTimeString(
+            substr_count($heureLimiteRetardStr, ':') >= 2 ? $heureLimiteRetardStr : $heureLimiteRetardStr.':00'
+        );
+
+        if ($heureArrivee->lt($heureOuverture)) {
+            return response()->json(['success' => false, 'message' => 'Le pointage n\'est pas encore ouvert. Il ouvre à '.$heureOuvertureStr.'.'], 403);
+        }
+        if ($heureArrivee->gt($heureFinArrivee)) {
+            return response()->json(['success' => false, 'message' => 'La fenêtre de pointage d\'arrivée est close (jusqu\'à '.$heureFinArriveeStr.').'], 403);
+        }
+
         $statut = $heureArrivee->gt($heureLimiteRetard) ? Presence::STATUT_RETARD : Presence::STATUT_PRESENT;
 
         Presence::create([
@@ -368,8 +388,9 @@ class PresenceController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Présence enregistrée.',
+            'message' => $statut === Presence::STATUT_RETARD ? 'Présence enregistrée (retard).' : 'Présence enregistrée.',
             'heure' => $heureArrivee->format('H:i'),
+            'statut' => $statut,
             'kind' => 'arrival',
         ]);
     }
@@ -407,11 +428,46 @@ class PresenceController extends Controller
         }
 
         $heureDepart = Carbon::now();
-        $hDepart = $heureDepart->format('H:i:s');
-        $hArrivee = Carbon::parse($presence->heure_arrivee)->format('H:i:s');
-        // Comparaison sur l'horloge du même jour (cas bureau). Les shifts nuit > minuit restent une évolution ultérieure.
-        if ($hDepart < $hArrivee) {
+        $todayDate = $session->date->copy();
+
+        // Fenêtre de départ : 15:59 – 23:59
+        $heureDebutDepartStr = Parametre::heureDebutDepart();
+        $heureFinDepartNormalStr = Parametre::heureFinDepartNormal();
+        $heureFermetureStr = Parametre::heureFermetureSession();
+
+        $heureDebutDepart = $todayDate->copy()->setTimeFromTimeString(
+            substr_count($heureDebutDepartStr, ':') >= 2 ? $heureDebutDepartStr : $heureDebutDepartStr.':00'
+        );
+        $heureFinDepartNormal = $todayDate->copy()->setTimeFromTimeString(
+            substr_count($heureFinDepartNormalStr, ':') >= 2 ? $heureFinDepartNormalStr : $heureFinDepartNormalStr.':00'
+        );
+        $heureFermeture = $todayDate->copy()->setTimeFromTimeString(
+            substr_count($heureFermetureStr, ':') >= 2 ? $heureFermetureStr : $heureFermetureStr.':00'
+        );
+
+        if ($heureDepart->lt($heureDebutDepart)) {
+            return response()->json(['success' => false, 'message' => 'Le pointage de départ n\'est pas encore ouvert. Il ouvre à '.$heureDebutDepartStr.'.'], 403);
+        }
+        if ($heureDepart->gt($heureFermeture)) {
+            return response()->json(['success' => false, 'message' => 'La session est fermée. Le pointage de départ n\'est plus possible.'], 403);
+        }
+
+        $hArrivee = Carbon::parse($presence->heure_arrivee);
+        $hArriveeFull = $todayDate->copy()->setTimeFromTimeString($hArrivee->format('H:i:s'));
+        if ($heureDepart->lt($hArriveeFull)) {
             return response()->json(['success' => false, 'message' => 'L\'heure de départ ne peut pas précéder l\'heure d\'arrivée.'], 422);
+        }
+
+        // Déterminer le type de départ et calculer les heures supplémentaires
+        $typeDepart = Presence::DEPART_NORMAL;
+        $heureSupplementaire = null;
+
+        if ($heureDepart->gt($heureFinDepartNormal)) {
+            $typeDepart = Presence::DEPART_SUPPLEMENTAIRE;
+            $suppMinutes = $heureFinDepartNormal->diffInMinutes($heureDepart);
+            $h = intdiv($suppMinutes, 60);
+            $m = $suppMinutes % 60;
+            $heureSupplementaire = sprintf('%02d:%02d:00', $h, $m);
         }
 
         if ($request->has('photo_capture') && $request->photo_capture) {
@@ -425,7 +481,6 @@ class PresenceController extends Controller
                         $imagekit = app(ImagekitService::class);
                         $imagekit->uploadBase64($data, $fileName, '/presences/departs');
                     } catch (\Exception $e) {
-                        // Fallback: stocker localement si Imagekit échoue
                         $localPath = 'presences/depart_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
                         Storage::disk('local')->put($localPath, $data);
                     }
@@ -435,12 +490,22 @@ class PresenceController extends Controller
 
         $presence->update([
             'heure_depart' => $heureDepart->format('H:i:s'),
+            'type_depart' => $typeDepart,
+            'heure_supplementaire' => $heureSupplementaire,
         ]);
+
+        $message = 'Départ enregistré.';
+        if ($typeDepart === Presence::DEPART_SUPPLEMENTAIRE) {
+            $suppStr = substr($heureSupplementaire, 0, 5);
+            $message = 'Départ enregistré avec heures supplémentaires ('.$suppStr.').';
+        }
 
         return response()->json([
             'success' => true,
-            'message' => 'Départ enregistré.',
+            'message' => $message,
             'heure' => $heureDepart->format('H:i'),
+            'type_depart' => $typeDepart,
+            'heure_supplementaire' => $heureSupplementaire,
             'kind' => 'departure',
         ]);
     }

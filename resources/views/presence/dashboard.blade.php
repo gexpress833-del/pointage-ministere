@@ -44,11 +44,11 @@
                     </p>
                     <p class="text-slate-400 text-xs mt-1">
                         @if($sessionOuverte)
-                            Vous pouvez enregistrer votre arrivée si ce n'est pas encore fait.
+                            Arrivée: 07:59 – 11:59 · Départ: 15:59 – 23:59
                         @elseif($sessionJour)
                             La session existe mais elle n'accepte plus de nouvelles arrivées.
                         @else
-                            Une session doit être ouverte par un administrateur pour permettre le pointage.
+                            La session s'ouvre automatiquement à 07:59.
                         @endif
                     </p>
                 </div>

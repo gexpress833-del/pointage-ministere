@@ -88,6 +88,23 @@ class PresenceResource extends Resource
                     ->label('Heure de départ')
                     ->default('—')
                     ->sortable(),
+                TextColumn::make('type_depart')
+                    ->label('Type départ')
+                    ->badge()
+                    ->default('—')
+                    ->color(fn (string $state): string => match ($state) {
+                        'supplementaire' => 'warning',
+                        'normal' => 'success',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'supplementaire' => 'Heures sup.',
+                        'normal' => 'Normal',
+                        default => $state,
+                    }),
+                TextColumn::make('heure_supplementaire')
+                    ->label('Heures sup.')
+                    ->default('—'),
                 TextColumn::make('statut')
                     ->label('Statut')
                     ->badge()

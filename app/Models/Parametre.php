@@ -22,8 +22,17 @@ class Parametre extends Model
 
     public const CLE_HEURE_LIMITE_RETARD = 'heure_limite_retard';
 
-    /** Heure de référence pour le départ (fin de journée attendue), HH:MM — indicatif / rapports. */
     public const CLE_HEURE_REFERENCE_DEPART = 'heure_reference_depart';
+
+    public const CLE_HEURE_OUVERTURE_SESSION = 'heure_ouverture_session';
+
+    public const CLE_HEURE_FIN_ARRIVEE = 'heure_fin_arrivee';
+
+    public const CLE_HEURE_DEBUT_DEPART = 'heure_debut_depart';
+
+    public const CLE_HEURE_FIN_DEPART_NORMAL = 'heure_fin_depart_normal';
+
+    public const CLE_HEURE_FERMETURE_SESSION = 'heure_fermeture_session';
 
     public const CLE_SEUIL_RECONNAISSANCE = 'seuil_reconnaissance_faciale';
 
@@ -62,15 +71,37 @@ class Parametre extends Model
      */
     public static function heureLimiteRetard(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_LIMITE_RETARD, '08:00');
+        return (string) static::getValue(self::CLE_HEURE_LIMITE_RETARD, '08:59');
     }
 
-    /**
-     * Heure de référence de fin de journée / départ attendu (format "H:i" ou "H:i:s").
-     */
     public static function heureReferenceDepart(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_REFERENCE_DEPART, '17:00');
+        return (string) static::getValue(self::CLE_HEURE_REFERENCE_DEPART, '16:59');
+    }
+
+    public static function heureOuvertureSession(): string
+    {
+        return (string) static::getValue(self::CLE_HEURE_OUVERTURE_SESSION, '07:59');
+    }
+
+    public static function heureFinArrivee(): string
+    {
+        return (string) static::getValue(self::CLE_HEURE_FIN_ARRIVEE, '11:59');
+    }
+
+    public static function heureDebutDepart(): string
+    {
+        return (string) static::getValue(self::CLE_HEURE_DEBUT_DEPART, '15:59');
+    }
+
+    public static function heureFinDepartNormal(): string
+    {
+        return (string) static::getValue(self::CLE_HEURE_FIN_DEPART_NORMAL, '16:59');
+    }
+
+    public static function heureFermetureSession(): string
+    {
+        return (string) static::getValue(self::CLE_HEURE_FERMETURE_SESSION, '23:59');
     }
 
     public static function clearCache(): void
