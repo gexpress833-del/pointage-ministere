@@ -148,7 +148,7 @@
                         biométrique
                     </h1>
                     <p class="hero-subtitle fade-in delay-2 text-base sm:text-lg text-blue-100 leading-relaxed mb-6 sm:mb-8 max-w-lg">
-                        Système de pointage par reconnaissance faciale. Sécurisé, rapide et fiable pour tous les agents et bureaux.
+                        Pointage biométrique par reconnaissance faciale. Session automatique chaque jour : arrivée de 07h59 à 11h59, départ de 15h59 à 23h59. Sécurisé, rapide et fiable.
                     </p>
                     <div class="fade-in delay-3 flex flex-col sm:flex-row gap-3">
                         @auth
@@ -199,12 +199,22 @@
                         <div class="bg-white/15 rounded-2xl p-4 border border-white/10">
                             <div class="flex items-center gap-2 mb-3">
                                 <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                                <p class="text-white text-xs font-medium">Session ouverte aujourd'hui</p>
+                                <p class="text-white text-xs font-medium">Session ouverte automatiquement à 07h59</p>
                             </div>
                             <div class="space-y-2">
-                                @foreach(['Agent Kabongo – 07:42 ✅','Agent Mbala – 08:15 ✅','Agent Dupont – 08:47 ⚠️'] as $row)
+                                @foreach(['Agent Kabongo – 07:42 ✅ Présent','Agent Mbala – 08:15 ✅ Présent','Agent Dupont – 09:12 ⚠️ Retard'] as $row)
                                 <div class="text-blue-200 text-xs bg-white/10 rounded-lg px-3 py-1.5">{{ $row }}</div>
                                 @endforeach
+                            </div>
+                        </div>
+                        <div class="bg-white/15 rounded-2xl p-4 border border-white/10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-2 h-2 rounded-full bg-amber-400"></div>
+                                <p class="text-white text-xs font-medium">Départ & heures supplémentaires</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="text-blue-200 text-xs bg-white/10 rounded-lg px-3 py-1.5">Agent Kabongo – 16:30 ✅ Départ normal</div>
+                                <div class="text-blue-200 text-xs bg-white/10 rounded-lg px-3 py-1.5">Agent Mbala – 18:45 ⏱️ +1h45 sup.</div>
                             </div>
                         </div>
                     </div>
@@ -223,12 +233,12 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 @foreach([
-                    ['bg-blue-50','text-blue-600','M2.25 6.375c0-1.035.84-1.875 1.875-1.875h16.5c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H4.125A1.875 1.875 0 0 1 2.25 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Z','Ouverture de session','L\'administrateur ouvre une session de présence chaque matin depuis le tableau de bord.'],
-                    ['bg-violet-50','text-violet-600','M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z','Reconnaissance faciale','L\'agent se connecte et laisse la caméra identifier son visage automatiquement.'],
-                    ['bg-green-50','text-green-600','m4.5 12.75 6 6 9-13.5','Signature automatique','Dès que le visage est reconnu, la présence est enregistrée avec l\'heure exacte d\'arrivée.'],
-                    ['bg-amber-50','text-amber-600','M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z','Statut en temps réel','Présent ou retardataire selon l\'heure limite configurée par l\'administration.'],
-                    ['bg-red-50','text-red-600','M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z','Rapports PDF','Générez des rapports journaliers ou mensuels par bureau en un seul clic.'],
-                    ['bg-slate-50','text-slate-600','M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z','Gestion des agents','Administration complète des utilisateurs, bureaux, services et paramètres système.'],
+                    ['bg-blue-50','text-blue-600','M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z','Session automatique','La session s\'ouvre automatiquement à 07h59 et se clôture à 23h59 chaque jour. Aucune intervention manuelle requise.'],
+                    ['bg-violet-50','text-violet-600','M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z','Reconnaissance faciale','L\'agent se connecte et laisse la caméra identifier son visage pour pointer son arrivée ou son départ.'],
+                    ['bg-green-50','text-green-600','m4.5 12.75 6 6 9-13.5','Arrivée : présent ou retard','Pointage d\'arrivée de 07h59 à 11h59. Avant 08h59 = présent, après 08h59 = retard. L\'heure exacte est enregistrée automatiquement.'],
+                    ['bg-amber-50','text-amber-600','M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9','Départ & heures sup.','Pointage de départ de 15h59 à 23h59. Avant 16h59 = départ normal, après 16h59 = heures supplémentaires calculées automatiquement.'],
+                    ['bg-red-50','text-red-600','M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z','Rapports PDF','Générez des rapports journaliers ou mensuels par bureau avec statuts, heures d\'arrivée, de départ et heures supplémentaires.'],
+                    ['bg-slate-50','text-slate-600','M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z','Gestion des agents','Administration complète des utilisateurs, bureaux, services, annonces et paramètres système via le panel Filament.'],
                 ] as [$bg, $color, $path, $title, $desc])
                 <div class="card-hover {{ $bg }} rounded-2xl p-6 border border-slate-100">
                     <div class="w-11 h-11 {{ $bg }} rounded-xl flex items-center justify-center mb-4 border border-current/10">
