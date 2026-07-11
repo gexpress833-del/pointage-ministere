@@ -261,7 +261,7 @@
         const clock       = document.getElementById('clock');
 
         // ── Config depuis PHP ────────────────────────────────────────────────
-        const MODEL_URL          = '{{ asset("models") }}';
+        const MODEL_URL          = '/models';
         const referencePhotoUrl  = @json($referencePhotoUrl);
         const sessionId          = {{ $sessionId }};
         const submitSignUrl      = @json($submitSignUrl ?? route('presence.sign.submit'));

@@ -1,4 +1,4 @@
-<link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
+<link rel="icon" type="image/png" href="/logo3.png">
 @include('partials.pwa-head')
 <style>
     /* Thème sombre — styles ciblés (sans écraser tous les composants Filament) */

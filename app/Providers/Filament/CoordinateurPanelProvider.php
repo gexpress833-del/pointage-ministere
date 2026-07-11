@@ -37,8 +37,8 @@ class CoordinateurPanelProvider extends PanelProvider
             ->path('coordinateur')
             ->login()
             ->brandName(config('app.name'))
-            ->brandLogo(fn () => '<img src="'.asset('logo3.png').'" alt="Logo" class="h-8 w-auto object-contain">')
-            ->darkModeBrandLogo(fn () => '<img src="'.asset('logo3.png').'" alt="Logo" class="h-8 w-auto object-contain">')
+            ->brandLogo(fn () => '<img src="/logo3.png" alt="Logo" class="h-8 w-auto object-contain">')
+            ->darkModeBrandLogo(fn () => '<img src="/logo3.png" alt="Logo" class="h-8 w-auto object-contain">')
             ->colors([
                 'primary' => Color::Green,
             ])

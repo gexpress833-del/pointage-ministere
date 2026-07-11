@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
+    <link rel="icon" type="image/png" href="/logo3.png">
     @include('partials.pwa-head')
     <title>Connexion — {{ config('app.name') }}</title>
     <x-vite-tailwind />
@@ -47,8 +47,8 @@
 
                 <div class="flex flex-col items-center mb-6 sm:mb-8">
                     <div class="flex items-center gap-3 mb-3 sm:mb-4">
-                        <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain">
-                        <img src="{{ asset('Drapeaux_rdc.webp') }}" alt="Drapeau RDC" class="w-10 h-7 sm:w-12 sm:h-8 object-cover rounded">
+                        <img src="/logo3.png" alt="Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain">
+                        <img src="/Drapeaux_rdc.webp" alt="Drapeau RDC" class="w-10 h-7 sm:w-12 sm:h-8 object-cover rounded">
                     </div>
                     <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Connexion</h1>
                     <p class="text-slate-500 text-sm mt-1">Accédez à votre espace personnel</p>
@@ -105,7 +105,7 @@
             </div>
 
             <div class="flex items-center justify-center gap-2 mt-6">
-                <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-6 h-6 object-contain">
+                <img src="/logo3.png" alt="Logo" class="w-6 h-6 object-contain">
                 <p class="text-center text-blue-100 text-xs">
                     Coordination Sous-Provinciale · République Démocratique du Congo
                 </p>

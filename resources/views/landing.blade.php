@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
+    <link rel="icon" type="image/png" href="/logo3.png">
     @include('partials.pwa-head')
     <title>{{ config('app.name') }}</title>
     <x-vite-tailwind />
@@ -71,7 +71,7 @@
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200" style="padding-top: env(safe-area-inset-top, 0px);">
         <div class="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 min-w-0">
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-8 h-8 sm:w-9 sm:h-9 object-contain flex-shrink-0 rounded-lg">
+                <img src="/logo3.png" alt="Logo" class="w-8 h-8 sm:w-9 sm:h-9 object-contain flex-shrink-0 rounded-lg">
                 <span class="font-semibold text-slate-800 text-xs sm:text-sm lg:text-base truncate leading-tight">{{ config('app.name') }}</span>
             </div>
             @auth
@@ -127,7 +127,7 @@
     {{-- ── Hero (sans min-h-screen + items-center : évite le vide bleu au-dessus du contenu) --}}
     <section class="gradient-bg relative pt-8 sm:pt-10 pb-10 sm:pb-14 overflow-hidden">
         {{-- Image d'arrière-plan: affiche du ministère --}}
-        <div class="absolute inset-0 opacity-10 bg-cover bg-center" style="background-image: url('{{ asset('affiche_ministère.jfif') }}');"></div>
+        <div class="absolute inset-0 opacity-10 bg-cover bg-center" style="background-image: url('/affiche_ministère.jfif');"></div>
         <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-blue-700/20"></div>
         {{-- Blobs décoratifs --}}
         <div class="blob w-96 h-96 bg-blue-300 top-4 -left-20"></div>
@@ -264,7 +264,7 @@
             <div class="flex flex-col md:flex-row items-center gap-6 sm:gap-10">
                 <div class="flex-shrink-0">
                     <div class="relative">
-                        <img src="{{ asset('leministre.jpg') }}" alt="Le Ministre" class="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl object-cover object-center shadow-xl border-4 border-white ring-1 ring-slate-200">
+                        <img src="/leministre.jpg" alt="Le Ministre" class="w-40 h-40 sm:w-48 sm:h-48 rounded-2xl object-cover object-center shadow-xl border-4 border-white ring-1 ring-slate-200">
                         <div class="absolute -bottom-3 -right-3 w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
@@ -285,7 +285,7 @@
 
     {{-- ── CTA final ───────────────────────────────────────── --}}
     <section class="gradient-bg py-16 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-cover bg-center" style="background-image: url('{{ asset('affiche_ministère.jfif') }}');"></div>
+        <div class="absolute inset-0 opacity-10 bg-cover bg-center" style="background-image: url('/affiche_ministère.jfif');"></div>
         <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center">
             <h2 class="text-3xl font-bold text-white mb-4">Prêt à pointer ?</h2>
             <p class="text-blue-100 mb-8">Connectez-vous pour accéder à votre espace personnel.</p>
@@ -313,8 +313,8 @@
     <footer class="bg-slate-900 text-slate-400 py-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-8 h-8 object-contain">
-                <img src="{{ asset('Drapeaux_rdc.webp') }}" alt="Drapeau RDC" class="w-10 h-7 object-cover rounded">
+                <img src="/logo3.png" alt="Logo" class="w-8 h-8 object-contain">
+                <img src="/Drapeaux_rdc.webp" alt="Drapeau RDC" class="w-10 h-7 object-cover rounded">
                 <span class="text-slate-300 font-medium">{{ config('app.name') }}</span>
             </div>
             <p class="text-center sm:text-right">Coordination Sous-Provinciale · République Démocratique du Congo · {{ date('Y') }}</p>

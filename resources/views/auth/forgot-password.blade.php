@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
+    <link rel="icon" type="image/png" href="/logo3.png">
     @include('partials.pwa-head')
     <title>Mot de passe oublié — {{ config('app.name') }}</title>
     <x-vite-tailwind />
@@ -40,7 +40,7 @@
             <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10">
 
                 <div class="flex flex-col items-center mb-6 sm:mb-8">
-                    <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain mb-3 sm:mb-4">
+                    <img src="/logo3.png" alt="Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain mb-3 sm:mb-4">
                     <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Mot de passe oublié</h1>
                     <p class="text-slate-500 text-sm mt-1 text-center">Entrez votre email ou téléphone pour recevoir un lien de réinitialisation.</p>
                 </div>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="flex items-center justify-center gap-2 mt-6">
-                <img src="{{ asset('logo3.png') }}" alt="Logo" class="w-6 h-6 object-contain">
+                <img src="/logo3.png" alt="Logo" class="w-6 h-6 object-contain">
                 <p class="text-center text-blue-100 text-xs">
                     Coordination Sous-Provinciale · République Démocratique du Congo
                 </p>

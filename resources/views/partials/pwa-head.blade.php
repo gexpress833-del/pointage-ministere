@@ -1,14 +1,14 @@
 {{-- PWA meta tags + service worker registration + auto install detection --}}
-<link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+<link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Pointage">
 <meta name="application-name" content="Pointage">
-<link rel="apple-touch-icon" href="{{ asset('logo3.png') }}">
-<link rel="icon" type="image/png" sizes="192x192" href="{{ asset('logo3.png') }}">
-<link rel="icon" type="image/png" sizes="512x512" href="{{ asset('logo3.png') }}">
+<link rel="apple-touch-icon" href="/logo3.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/logo3.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/logo3.png">
 
 <script>
 (function () {
