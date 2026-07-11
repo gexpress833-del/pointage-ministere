@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
+    @include('partials.pwa-head')
     <title>{{ config('app.name') }}</title>
     <x-vite-tailwind />
     <style>
@@ -20,6 +21,15 @@
             .hero-subtitle { font-size: 0.95rem !important; }
             .nav-btn { padding: 0.5rem 0.75rem !important; font-size: 0.8rem !important; }
         }
+        @media (max-width: 640px) {
+            .hero-title { font-size: 2.25rem !important; }
+            .hero-subtitle { font-size: 1rem !important; }
+        }
+        @media (min-width: 641px) and (max-width: 1023px) {
+            .hero-title { font-size: 3rem !important; }
+        }
+        /* Safe area pour notch / dynamic island */
+        body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
 
         .gradient-bg {
             background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 50%, #1e40af 100%);

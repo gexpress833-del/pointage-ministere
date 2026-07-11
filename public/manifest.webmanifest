@@ -1,0 +1,52 @@
+{
+    "name": "Pointage Ministère — Coordination Sous-Provinciale",
+    "short_name": "Pointage",
+    "description": "Système de pointage biométrique par reconnaissance faciale",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0f172a",
+    "theme_color": "#1d4ed8",
+    "lang": "fr",
+    "dir": "ltr",
+    "categories": ["productivity", "business"],
+    "icons": [
+        {
+            "src": "/logo3.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/logo3.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/logo3.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/logo3.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Connexion",
+            "url": "/login",
+            "description": "Accéder à l'espace personnel"
+        },
+        {
+            "name": "Tableau de bord",
+            "url": "/presence",
+            "description": "Mon pointage"
+        }
+    ]
+}

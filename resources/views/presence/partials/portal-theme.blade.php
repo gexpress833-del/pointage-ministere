@@ -76,4 +76,12 @@
             overflow: hidden;
         }
     }
+    @media (max-width: 380px) {
+        .glass { padding: 0.75rem !important; }
+        main { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+    }
+    /* Tablet adjustments */
+    @media (min-width: 641px) and (max-width: 1023px) {
+        main { max-width: 100% !important; }
+    }
 </style>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="icon" type="image/png" href="{{ asset('logo3.png') }}">
+    @include('partials.pwa-head')
     <title>Connexion — {{ config('app.name') }}</title>
     <x-vite-tailwind />
     <style>
@@ -26,6 +27,12 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 380px) {
+            .gradient-bg { padding-top: env(safe-area-inset-top, 0px); }
+        }
+        @media (max-height: 640px) {
+            .fade-in { padding-top: 1rem; padding-bottom: 1rem; }
         }
     </style>
 </head>
