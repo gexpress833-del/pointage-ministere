@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#0f172a">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('partials.pwa-head')
+    @include('partials.spinner')
     <title>Mon profil – {{ config('app.name') }}</title>
     <x-vite-tailwind />
     @include('presence.partials.portal-theme')
@@ -168,7 +169,7 @@
 
             <button type="submit"
                     class="w-full sm:w-auto min-h-[48px] px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-sm shadow-lg transition touch-manipulation">
-                Enregistrer les modifications
+                <span class="btn-label">Enregistrer les modifications</span>
             </button>
         </form>
 

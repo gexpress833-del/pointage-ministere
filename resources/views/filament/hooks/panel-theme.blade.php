@@ -1,5 +1,6 @@
 <link rel="icon" type="image/png" href="/logo3.png">
 @include('partials.pwa-head')
+@include('partials.spinner')
 <style>
     /* Thème sombre — styles ciblés (sans écraser tous les composants Filament) */
     body.fi-body,

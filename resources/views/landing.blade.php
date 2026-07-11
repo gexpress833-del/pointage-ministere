@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="icon" type="image/png" href="/logo3.png">
     @include('partials.pwa-head')
+    @include('partials.spinner')
     <title>{{ config('app.name') }}</title>
     <x-vite-tailwind />
     <style>

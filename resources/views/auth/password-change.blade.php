@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="icon" type="image/png" href="/logo3.png">
     @include('partials.pwa-head')
+    @include('partials.spinner')
     <title>Changer le mot de passe — {{ config('app.name') }}</title>
     <x-vite-tailwind />
     <style>
@@ -62,7 +63,7 @@
                     </div>
                     <button type="submit"
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base min-h-[48px]">
-                        Changer le mot de passe
+                        <span class="btn-label">Changer le mot de passe</span>
                     </button>
                 </form>
 
@@ -70,7 +71,7 @@
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-sm text-slate-500 hover:text-red-600 transition">
-                            Se déconnecter
+                            <span class="btn-label">Se déconnecter</span>
                         </button>
                     </form>
                 </div>

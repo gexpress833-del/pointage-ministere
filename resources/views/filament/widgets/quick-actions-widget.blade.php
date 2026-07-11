@@ -252,7 +252,7 @@
                         </svg>
                     </span>
                     <span class="qa-text">
-                        <p class="qa-title">Déconnexion</p>
+                        <p class="qa-title"><span class="btn-label">Déconnexion</span></p>
                         <p class="qa-subtitle">Quitter la session</p>
                     </span>
                 </button>

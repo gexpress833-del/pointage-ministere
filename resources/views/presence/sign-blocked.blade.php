@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#1d4ed8">
     @include('partials.pwa-head')
+    @include('partials.spinner')
     <title>{{ $titre }} – {{ config('app.name') }}</title>
     <x-vite-tailwind />
     <style>

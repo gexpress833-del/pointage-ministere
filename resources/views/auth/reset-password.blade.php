@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="icon" type="image/png" href="/logo3.png">
     @include('partials.pwa-head')
+    @include('partials.spinner')
     <title>Nouveau mot de passe — {{ config('app.name') }}</title>
     <x-vite-tailwind />
     <style>
@@ -82,7 +83,7 @@
                     </div>
                     <button type="submit"
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-base min-h-[48px]">
-                        Réinitialiser le mot de passe
+                        <span class="btn-label">Réinitialiser le mot de passe</span>
                     </button>
                 </form>
 
