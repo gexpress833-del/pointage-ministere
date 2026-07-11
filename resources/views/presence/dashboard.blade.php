@@ -147,6 +147,16 @@
                     <p class="text-slate-400 text-xs mt-0.5">Liste filtrable par mois et statut</p>
                 </div>
             </a>
+            <a href="{{ route('presence.profile') }}"
+               class="glass rounded-2xl p-4 flex flex-col items-start gap-2 border border-blue-500/20 hover:border-blue-400/40 transition group">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-300 group-hover:bg-blue-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                </div>
+                <div>
+                    <p class="text-white font-semibold text-sm">Mon profil</p>
+                    <p class="text-slate-400 text-xs mt-0.5">Voir et modifier mes informations</p>
+                </div>
+            </a>
         </div>
 
         @if($sessionOuverte)
