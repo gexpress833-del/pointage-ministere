@@ -15,7 +15,7 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_TIMEZONE
-        value: Africa/Kinshasa
+        value: Africa/Lubumbashi
       - key: APP_LOCALE
         value: fr
       - key: APP_FALLBACK_LOCALE
@@ -79,7 +79,7 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_TIMEZONE
-        value: Africa/Kinshasa
+        value: Africa/Lubumbashi
       - key: APP_LOCALE
         value: fr
       - key: APP_FALLBACK_LOCALE
