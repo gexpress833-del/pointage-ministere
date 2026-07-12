@@ -27,7 +27,7 @@ class FilamentSessionsPresenceTest extends TestCase
         $user = User::factory()->coordinateur()->create();
 
         $this->actingAs($user)
-            ->get('/admin/sessions-presence')
+            ->get('/coordinateur/sessions-presence')
             ->assertOk();
     }
 

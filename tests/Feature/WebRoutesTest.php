@@ -15,27 +15,27 @@ class WebRoutesTest extends TestCase
         $this->get('/')->assertOk()->assertSee(config('app.name'), false);
     }
 
-    public function test_root_redirects_agent_to_dashboard(): void
+    public function test_root_shows_landing_for_authenticated_agent(): void
     {
         $user = User::factory()->agent()->create();
 
         $this->actingAs($user)
             ->get('/')
-            ->assertRedirect(route('presence.dashboard'));
+            ->assertOk();
     }
 
-    public function test_root_redirects_coordinateur_to_admin_panel(): void
+    public function test_root_shows_landing_for_authenticated_coordinateur(): void
     {
         $user = User::factory()->coordinateur()->create();
 
         $this->actingAs($user)
             ->get('/')
-            ->assertRedirect('/admin');
+            ->assertOk();
     }
 
     public function test_presence_routes_require_authentication(): void
     {
-        $login = route('filament.admin.auth.login');
+        $login = route('login');
 
         $this->get(route('presence.sign'))->assertRedirect($login);
         $this->get(route('presence.dashboard'))->assertRedirect($login);

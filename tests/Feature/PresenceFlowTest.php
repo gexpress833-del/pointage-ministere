@@ -8,6 +8,7 @@ use App\Models\SessionPresence;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class PresenceFlowTest extends TestCase
@@ -21,7 +22,7 @@ class PresenceFlowTest extends TestCase
         $this->actingAs($admin)
             ->get(route('presence.sign'))
             ->assertOk()
-            ->assertSee('Accès non autorisé', false);
+            ->assertSee('Pointage non requis', false);
     }
 
     public function test_agent_without_photo_gets_blocked_sign_page(): void
@@ -43,6 +44,7 @@ class PresenceFlowTest extends TestCase
 
     public function test_agent_can_sign_when_session_open_and_photo_exists(): void
     {
+        Carbon::setTestNow(Carbon::create(2026, 7, 13, 9, 0, 0));
         Storage::fake('local');
 
         $bureau = Bureau::factory()->create();
@@ -76,10 +78,13 @@ class PresenceFlowTest extends TestCase
             'session_id' => $session->id,
             'user_id' => $agent->id,
         ]);
+
+        Carbon::setTestNow();
     }
 
     public function test_agent_can_sign_depart_after_arrival(): void
     {
+        Carbon::setTestNow(Carbon::create(2026, 7, 13, 17, 0, 0));
         Storage::fake('local');
 
         $bureau = Bureau::factory()->create();
@@ -123,6 +128,8 @@ class PresenceFlowTest extends TestCase
         ]);
 
         $this->assertNotNull(Presence::where('session_id', $session->id)->where('user_id', $agent->id)->value('heure_depart'));
+
+        Carbon::setTestNow();
     }
 
     public function test_admin_cannot_post_sign(): void

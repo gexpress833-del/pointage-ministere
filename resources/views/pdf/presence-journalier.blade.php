@@ -99,7 +99,7 @@
         <p class="meta">
             Date du jour : <strong>{{ $date }}</strong>
             &nbsp;·&nbsp;
-            Session <strong>{{ $session->statut === 'ouverte' ? 'ouverte' : 'fermée' }}</strong>
+            Session <strong>{{ $session ? ($session->statut === 'ouverte' ? 'ouverte' : 'fermée') : 'non créée' }}</strong>
             &nbsp;·&nbsp;
             Départ de réf. : <strong>{{ \Carbon\Carbon::parse($heureReferenceDepart ?? '17:00')->format('H:i') }}</strong>
         </p>
@@ -136,7 +136,7 @@
         <tbody>
             @foreach ($presences as $index => $p)
             @php
-                $jour = $session->date->format('Y-m-d');
+                $jour = $session?->date?->format('Y-m-d') ?? \Carbon\Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
                 $arr = \Carbon\Carbon::parse($jour.' '.$p->heure_arrivee);
                 $dep = $p->heure_depart ? \Carbon\Carbon::parse($jour.' '.$p->heure_depart) : null;
                 $duree = '—';

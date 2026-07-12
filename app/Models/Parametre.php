@@ -71,37 +71,48 @@ class Parametre extends Model
      */
     public static function heureLimiteRetard(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_LIMITE_RETARD, '08:59');
+        return static::getTimeValue(self::CLE_HEURE_LIMITE_RETARD, '08:59');
     }
 
     public static function heureReferenceDepart(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_REFERENCE_DEPART, '16:59');
+        return static::getTimeValue(self::CLE_HEURE_REFERENCE_DEPART, '16:59');
     }
 
     public static function heureOuvertureSession(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_OUVERTURE_SESSION, '07:59');
+        return static::getTimeValue(self::CLE_HEURE_OUVERTURE_SESSION, '07:59');
     }
 
     public static function heureFinArrivee(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_FIN_ARRIVEE, '11:59');
+        return static::getTimeValue(self::CLE_HEURE_FIN_ARRIVEE, '11:59');
     }
 
     public static function heureDebutDepart(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_DEBUT_DEPART, '15:59');
+        return static::getTimeValue(self::CLE_HEURE_DEBUT_DEPART, '15:59');
     }
 
     public static function heureFinDepartNormal(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_FIN_DEPART_NORMAL, '16:59');
+        return static::getTimeValue(self::CLE_HEURE_FIN_DEPART_NORMAL, '16:59');
     }
 
     public static function heureFermetureSession(): string
     {
-        return (string) static::getValue(self::CLE_HEURE_FERMETURE_SESSION, '23:59');
+        return static::getTimeValue(self::CLE_HEURE_FERMETURE_SESSION, '23:59');
+    }
+
+    private static function getTimeValue(string $key, string $default): string
+    {
+        $value = (string) static::getValue($key, $default);
+
+        if (! preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/', $value)) {
+            return $default;
+        }
+
+        return $value;
     }
 
     public static function clearCache(): void

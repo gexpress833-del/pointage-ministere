@@ -44,11 +44,15 @@ class ReportController extends Controller
     public function userPdf(Request $request, User $user)
     {
         $this->authorizeViewReport();
+        $validated = $request->validate([
+            'start' => ['nullable', 'date_format:Y-m-d'],
+            'end' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:start'],
+        ]);
 
         return app(PresenceReportPdf::class)->userReport(
             $user,
-            $request->get('start'),
-            $request->get('end')
+            $validated['start'] ?? null,
+            $validated['end'] ?? null
         );
     }
 

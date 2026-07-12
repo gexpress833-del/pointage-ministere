@@ -2,18 +2,29 @@
 set -e
 
 # Fix APP_KEY: Laravel requires base64: prefix
-if [ -n "$APP_KEY" ] && [ "${APP_KEY#base64:}" = "$APP_KEY" ]; then
-    echo "Fixing APP_KEY format (adding base64: prefix)..."
-    export APP_KEY="base64:$APP_KEY"
-elif [ -z "$APP_KEY" ]; then
-    echo "Generating APP_KEY..."
-    export APP_KEY=$(php artisan key:generate --show)
+if [ -z "$APP_KEY" ]; then
+    echo "ERROR: APP_KEY is missing. Configure a persistent Laravel application key."
+    exit 1
 fi
-echo "APP_KEY is set (starts with: ${APP_KEY:0:7})"
+
+if [ "${APP_KEY#base64:}" = "$APP_KEY" ] && [ "${#APP_KEY}" -ne 32 ]; then
+    if php -r '$decoded = base64_decode(getenv("APP_KEY"), true); exit(is_string($decoded) && strlen($decoded) === 32 ? 0 : 1);'; then
+        export APP_KEY="base64:$APP_KEY"
+    else
+        echo "ERROR: APP_KEY is neither a 32-byte raw key nor valid base64 for 32 bytes."
+        exit 1
+    fi
+fi
+
+php -r '$key = getenv("APP_KEY"); $raw = str_starts_with($key, "base64:") ? base64_decode(substr($key, 7), true) : $key; exit(is_string($raw) && strlen($raw) === 32 ? 0 : 1);' || {
+    echo "ERROR: APP_KEY is invalid for AES-256-CBC."
+    exit 1
+}
+echo "APP_KEY is valid."
 
 # Run migrations (non-fatal: DB might not be ready yet on first deploy)
 echo "Running migrations..."
-php artisan migrate --force --no-interaction || echo "WARNING: migrations failed, continuing..."
+php artisan migrate --force --no-interaction
 
 # Run seeders (non-fatal)
 echo "Running seeders..."

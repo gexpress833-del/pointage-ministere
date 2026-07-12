@@ -50,12 +50,16 @@ class AutoSessionCommand extends Command
 
         // Entre ouverture et fermeture : créer/ouvrir la session si nécessaire
         if (! $session) {
-            SessionPresence::create([
-                'date' => $today,
-                'statut' => SessionPresence::STATUT_OUVERTE,
-                'opened_by' => null,
-            ]);
-            $this->info("Session ouverte automatiquement à {$now->format('H:i')}.");
+            $session = SessionPresence::firstOrCreate(
+                ['date' => $today->toDateString()],
+                [
+                    'statut' => SessionPresence::STATUT_OUVERTE,
+                    'opened_by' => null,
+                ]
+            );
+            $this->info($session->wasRecentlyCreated
+                ? "Session ouverte automatiquement à {$now->format('H:i')}."
+                : 'Session déjà créée par un autre processus.');
         } elseif (! $session->isOuverte()) {
             $session->update([
                 'statut' => SessionPresence::STATUT_OUVERTE,

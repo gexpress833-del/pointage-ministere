@@ -8,9 +8,11 @@ use App\Models\SessionPresence;
 use App\Models\User;
 use App\Services\ImagekitService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PresenceController extends Controller
@@ -190,6 +192,9 @@ class PresenceController extends Controller
         $user = Auth::user();
 
         $moisSelectionne = $request->get('month', now()->format('Y-m'));
+        if (! is_string($moisSelectionne) || ! preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $moisSelectionne)) {
+            $moisSelectionne = now()->format('Y-m');
+        }
         $statutFiltre = $request->get('statut', '');
         if (! in_array($statutFiltre, ['', 'present', 'retard'], true)) {
             $statutFiltre = '';
@@ -303,7 +308,10 @@ class PresenceController extends Controller
      */
     public function sign(Request $request)
     {
-        $request->validate(['session_id' => 'required|integer']);
+        $request->validate([
+            'session_id' => ['required', 'integer'],
+            'photo_capture' => ['nullable', 'string', 'max:8388608'],
+        ]);
 
         $user = Auth::user();
 
@@ -334,18 +342,26 @@ class PresenceController extends Controller
             $base64 = $request->photo_capture;
             if (preg_match('/^data:image\/(\w+);base64,/', $base64, $m)) {
                 $ext = $m[1] === 'jpeg' ? 'jpg' : $m[1];
-                $data = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64));
+                $data = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64), true);
                 if ($data !== false) {
                     $fileName = 'presence_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
                     try {
                         $imagekit = app(ImagekitService::class);
                         $result = $imagekit->uploadBase64($data, $fileName, '/presences');
                         $photoCapture = $result['url'];
-                    } catch (\Exception $e) {
-                        // Fallback: stocker localement si Imagekit échoue
+                    } catch (\Throwable $e) {
                         $localPath = 'presences/'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
-                        Storage::disk('local')->put($localPath, $data);
-                        $photoCapture = $localPath;
+                        try {
+                            Storage::disk('local')->put($localPath, $data);
+                            $photoCapture = $localPath;
+                        } catch (\Throwable $storageException) {
+                            Log::warning('Capture de présence non stockée', [
+                                'user_id' => $user->id,
+                                'session_id' => $session->id,
+                                'imagekit_error' => $e->getMessage(),
+                                'storage_error' => $storageException->getMessage(),
+                            ]);
+                        }
                     }
                 }
             }
@@ -378,13 +394,21 @@ class PresenceController extends Controller
 
         $statut = $heureArrivee->gt($heureLimiteRetard) ? Presence::STATUT_RETARD : Presence::STATUT_PRESENT;
 
-        Presence::create([
-            'session_id' => $session->id,
-            'user_id' => $user->id,
-            'heure_arrivee' => $heureArrivee->format('H:i:s'),
-            'photo_capture' => $photoCapture,
-            'statut' => $statut,
-        ]);
+        try {
+            Presence::create([
+                'session_id' => $session->id,
+                'user_id' => $user->id,
+                'heure_arrivee' => $heureArrivee->format('H:i:s'),
+                'photo_capture' => $photoCapture,
+                'statut' => $statut,
+            ]);
+        } catch (QueryException $e) {
+            if (Presence::where('session_id', $session->id)->where('user_id', $user->id)->exists()) {
+                return response()->json(['success' => false, 'message' => 'Présence déjà enregistrée.'], 409);
+            }
+
+            throw $e;
+        }
 
         return response()->json([
             'success' => true,
@@ -400,7 +424,10 @@ class PresenceController extends Controller
      */
     public function signDepart(Request $request)
     {
-        $request->validate(['session_id' => 'required|integer']);
+        $request->validate([
+            'session_id' => ['required', 'integer'],
+            'photo_capture' => ['nullable', 'string', 'max:8388608'],
+        ]);
 
         $user = Auth::user();
 
@@ -474,15 +501,24 @@ class PresenceController extends Controller
             $base64 = $request->photo_capture;
             if (preg_match('/^data:image\/(\w+);base64,/', $base64, $m)) {
                 $ext = $m[1] === 'jpeg' ? 'jpg' : $m[1];
-                $data = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64));
+                $data = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64), true);
                 if ($data !== false) {
                     $fileName = 'depart_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
                     try {
                         $imagekit = app(ImagekitService::class);
                         $imagekit->uploadBase64($data, $fileName, '/presences/departs');
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $localPath = 'presences/depart_'.$session->id.'_'.$user->id.'_'.time().'.'.$ext;
-                        Storage::disk('local')->put($localPath, $data);
+                        try {
+                            Storage::disk('local')->put($localPath, $data);
+                        } catch (\Throwable $storageException) {
+                            Log::warning('Capture de départ non stockée', [
+                                'user_id' => $user->id,
+                                'session_id' => $session->id,
+                                'imagekit_error' => $e->getMessage(),
+                                'storage_error' => $storageException->getMessage(),
+                            ]);
+                        }
                     }
                 }
             }
