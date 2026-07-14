@@ -22,7 +22,7 @@ php -r '$key = getenv("APP_KEY"); $raw = str_starts_with($key, "base64:") ? base
 }
 echo "APP_KEY is valid."
 
-# Run migrations (non-fatal: DB might not be ready yet on first deploy)
+# Run migrations (fatal: app must not start with missing tables/columns)
 echo "Running migrations..."
 php artisan migrate --force --no-interaction
 
