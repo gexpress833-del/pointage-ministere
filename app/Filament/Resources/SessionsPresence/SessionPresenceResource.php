@@ -43,7 +43,9 @@ class SessionPresenceResource extends Resource
                     ->badge()
                     ->color(fn ($state): string => $state === SessionPresence::STATUT_OUVERTE ? 'success' : 'gray'),
                 TextColumn::make('openedBy.nom')->label('Ouverte par')->default('—'),
+                TextColumn::make('opened_at')->label('Ouverte le')->dateTime('d/m/Y H:i')->sortable()->default('—'),
                 TextColumn::make('closedBy.nom')->label('Fermée par')->default('—'),
+                TextColumn::make('closed_at')->label('Fermée le')->dateTime('d/m/Y H:i')->sortable()->default('—'),
                 TextColumn::make('presences_count')->label('Signatures')->counts('presences'),
             ])
             ->defaultSort('date', 'desc')
@@ -54,14 +56,32 @@ class SessionPresenceResource extends Resource
                     ->color('danger')
                     ->visible(fn (SessionPresence $record) => $record->isOuverte() && (Auth::user()?->isAdministrateur() || Auth::user()?->isSecretaire()))
                     ->action(function (SessionPresence $record) {
-                        $record->update([
-                            'statut' => SessionPresence::STATUT_FERMEE,
-                            'closed_by' => Auth::id(),
-                            'closed_at' => now(),
-                        ]);
+                        $record->close(Auth::id());
                         \Filament\Notifications\Notification::make()
                             ->title('Session fermée')
                             ->body('La session du '.$record->date->format('d/m/Y').' a été fermée avec succès.')
+                            ->success()
+                            ->send();
+                    })
+                    ->requiresConfirmation(),
+                Action::make('rouvrir')
+                    ->label('Réouvrir')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('warning')
+                    ->visible(fn (SessionPresence $record) => $record->isFermee() && (Auth::user()?->isAdministrateur() || Auth::user()?->isSecretaire()))
+                    ->action(function (SessionPresence $record) {
+                        if (! \App\Models\Parametre::sessionAllowReopen()) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Réouverture désactivée')
+                                ->body('La réouverture des sessions est désactivée dans les paramètres.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+                        $record->reopen(Auth::id());
+                        \Filament\Notifications\Notification::make()
+                            ->title('Session réouverte')
+                            ->body('La session du '.$record->date->format('d/m/Y').' a été réouverte avec succès.')
                             ->success()
                             ->send();
                     })

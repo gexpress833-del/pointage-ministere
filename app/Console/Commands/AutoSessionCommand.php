@@ -26,20 +26,21 @@ class AutoSessionCommand extends Command
 
         $session = SessionPresence::where('date', $today)->first();
 
+        if (! Parametre::sessionAutoOpen() && ! $session) {
+            $this->info('Ouverture automatique désactivée. Aucune action.');
+            return self::SUCCESS;
+        }
+
         // Avant l'heure d'ouverture : rien à faire
         if ($now->lt($ouverture)) {
             $this->info("Avant l'heure d'ouverture ({$heureOuverture}). Rien à faire.");
-
             return self::SUCCESS;
         }
 
         // Après l'heure de fermeture : fermer la session si elle existe et est ouverte
         if ($now->gte($fermeture)) {
-            if ($session && $session->isOuverte()) {
-                $session->update([
-                    'statut' => SessionPresence::STATUT_FERMEE,
-                    'closed_at' => $now,
-                ]);
+            if ($session && $session->isOuverte() && Parametre::sessionAutoClose()) {
+                $session->close(0);
                 $this->info("Session fermée automatiquement à {$now->format('H:i')}.");
             } else {
                 $this->info('Session déjà fermée ou inexistante.');
@@ -55,18 +56,19 @@ class AutoSessionCommand extends Command
                 [
                     'statut' => SessionPresence::STATUT_OUVERTE,
                     'opened_by' => null,
+                    'opened_at' => $now,
                 ]
             );
             $this->info($session->wasRecentlyCreated
                 ? "Session ouverte automatiquement à {$now->format('H:i')}."
                 : 'Session déjà créée par un autre processus.');
         } elseif (! $session->isOuverte()) {
-            $session->update([
-                'statut' => SessionPresence::STATUT_OUVERTE,
-                'closed_by' => null,
-                'closed_at' => null,
-            ]);
-            $this->info("Session réouverte automatiquement à {$now->format('H:i')}.");
+            if (Parametre::sessionAllowReopen()) {
+                $session->reopen(0);
+                $this->info("Session réouverte automatiquement à {$now->format('H:i')}.");
+            } else {
+                $this->info('Session fermée, réouverture désactivée.');
+            }
         } else {
             $this->info('Session déjà ouverte.');
         }

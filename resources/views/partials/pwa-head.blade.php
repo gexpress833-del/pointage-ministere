@@ -14,6 +14,34 @@
 (function () {
     'use strict';
 
+    // ---- Mobile keyboard fix: Tab key sent instead of 'S' ----
+    if (navigator.maxTouchPoints > 0) {
+        document.addEventListener('keydown', function (event) {
+            if (event.key !== 'Tab' || event.ctrlKey || event.altKey || event.metaKey) return;
+
+            var field = event.target;
+            var isTextField = field instanceof HTMLInputElement
+                && !['button', 'checkbox', 'file', 'hidden', 'radio', 'range', 'reset', 'submit'].includes(field.type);
+            var isTextArea = field instanceof HTMLTextAreaElement;
+            var isEditable = field.isContentEditable;
+
+            if (!isTextField && !isTextArea && !isEditable) return;
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            if (isEditable) {
+                document.execCommand('insertText', false, event.shiftKey ? 'S' : 's');
+                return;
+            }
+
+            var start = field.selectionStart ?? field.value.length;
+            var end = field.selectionEnd ?? start;
+            field.setRangeText(event.shiftKey ? 'S' : 's', start, end, 'end');
+            field.dispatchEvent(new Event('input', { bubbles: true }));
+        }, true);
+    }
+
     // ---- Service Worker ----
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {

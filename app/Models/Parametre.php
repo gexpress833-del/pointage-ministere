@@ -36,6 +36,14 @@ class Parametre extends Model
 
     public const CLE_SEUIL_RECONNAISSANCE = 'seuil_reconnaissance_faciale';
 
+    public const CLE_SESSION_AUTO_OPEN = 'session_auto_open';
+
+    public const CLE_SESSION_AUTO_CLOSE = 'session_auto_close';
+
+    public const CLE_SESSION_ALLOW_REOPEN = 'session_allow_reopen';
+
+    public const CLE_SESSION_ALLOW_RESET_PRESENCES = 'session_allow_reset_presences';
+
     /**
      * Récupère la valeur d'un paramètre (avec cache).
      */
@@ -102,6 +110,26 @@ class Parametre extends Model
     public static function heureFermetureSession(): string
     {
         return static::getTimeValue(self::CLE_HEURE_FERMETURE_SESSION, '23:59');
+    }
+
+    public static function sessionAutoOpen(): bool
+    {
+        return (bool) static::getValue(self::CLE_SESSION_AUTO_OPEN, true);
+    }
+
+    public static function sessionAutoClose(): bool
+    {
+        return (bool) static::getValue(self::CLE_SESSION_AUTO_CLOSE, true);
+    }
+
+    public static function sessionAllowReopen(): bool
+    {
+        return (bool) static::getValue(self::CLE_SESSION_ALLOW_REOPEN, true);
+    }
+
+    public static function sessionAllowResetPresences(): bool
+    {
+        return (bool) static::getValue(self::CLE_SESSION_ALLOW_RESET_PRESENCES, true);
     }
 
     private static function getTimeValue(string $key, string $default): string
