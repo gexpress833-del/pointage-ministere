@@ -187,11 +187,14 @@
     </main>
 
     <script>
+        const serverTimestamp = {{ $serverTimestamp }};
+        const localOffsetAtLoad = Date.now() - serverTimestamp;
+
         function updateDashboardClock() {
             const clock = document.getElementById('dashboard-clock');
             if (!clock) return;
 
-            const now = new Date();
+            const now = new Date(Date.now() - localOffsetAtLoad);
             const h = String(now.getHours()).padStart(2, '0');
             const m = String(now.getMinutes()).padStart(2, '0');
             const s = String(now.getSeconds()).padStart(2, '0');

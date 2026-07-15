@@ -181,6 +181,7 @@ class PresenceController extends Controller
             'sessionOuverte' => $sessionJour?->isOuverte() ?? false,
             'besoinPointerDepart' => $this->besoinPointerDepartPour($user),
             'exemptePointage' => $user->isExemptePointage(),
+            'serverTimestamp' => now()->timestamp * 1000,
         ]);
     }
 
