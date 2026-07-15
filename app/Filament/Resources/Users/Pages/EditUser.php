@@ -38,9 +38,24 @@ class EditUser extends EditRecord
         // Ne jamais modifier le mot de passe depuis le panel
         unset($data['password']);
 
-        // Upload direct de la photo vers Imagekit si une nouvelle photo a été uploadée
-        if (! empty($data['photo_reference']) && ! ImagekitService::isImagekitUrl($data['photo_reference']) && Storage::disk('local')->exists($data['photo_reference'])) {
-            $localPath = $data['photo_reference'];
+        $oldPhoto = $this->record->photo_reference;
+        $newPhoto = $data['photo_reference'] ?? null;
+
+        // Si aucune nouvelle photo n'est fournie, conserver l'ancienne (même si l'éditeur l'a vidé temporairement)
+        if (empty($newPhoto)) {
+            $data['photo_reference'] = $oldPhoto;
+
+            return $data;
+        }
+
+        // Si la valeur est déjà une URL distante (Imagekit), ne rien faire
+        if (ImagekitService::isImagekitUrl($newPhoto)) {
+            return $data;
+        }
+
+        // Upload de la nouvelle photo locale vers Imagekit
+        if (Storage::disk('local')->exists($newPhoto)) {
+            $localPath = $newPhoto;
             try {
                 $imagekit = app(ImagekitService::class);
                 $localFile = Storage::disk('local')->path($localPath);
@@ -51,6 +66,11 @@ class EditUser extends EditRecord
                 $data['photo_reference'] = $result['url'];
 
                 Storage::disk('local')->delete($localPath);
+
+                // Supprimer l'ancienne photo distante si elle était hébergée sur Imagekit
+                if ($oldPhoto && ImagekitService::isImagekitUrl($oldPhoto)) {
+                    $this->deleteOldImagekitFile($oldPhoto);
+                }
             } catch (\Exception $e) {
                 \Filament\Notifications\Notification::make()
                     ->title('Erreur Imagekit')
@@ -58,10 +78,50 @@ class EditUser extends EditRecord
                     ->danger()
                     ->persistent()
                     ->send();
+
+                // En cas d'échec, conserver l'ancienne photo
+                $data['photo_reference'] = $oldPhoto;
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Tente de supprimer l'ancien fichier sur Imagekit (récupère fileId depuis l'URL si possible).
+     */
+    private function deleteOldImagekitFile(string $url): void
+    {
+        $parsed = parse_url($url);
+        $path = $parsed['path'] ?? '';
+        $fileName = basename($path);
+
+        if (! $fileName) {
+            return;
+        }
+
+        try {
+            $imagekit = app(ImagekitService::class);
+            $endpoint = config('imagekit.url_endpoint');
+            $folder = '/photos_reference';
+
+            $response = \Illuminate\Support\Facades\Http::withBasicAuth(config('imagekit.private_key'), '')
+                ->timeout(30)
+                ->get(config('imagekit.management_endpoint').'/files', [
+                    'searchQuery' => "name='{$fileName}' path='{$folder}'",
+                    'limit' => 1,
+                ]);
+
+            if ($response->successful()) {
+                $files = $response->json('files');
+                $fileId = $files[0]['fileId'] ?? null;
+                if ($fileId) {
+                    $imagekit->delete($fileId);
+                }
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::warning('Impossible de supprimer l\'ancienne photo Imagekit : '.$e->getMessage());
+        }
     }
 
     protected function getSavedNotification(): ?\Filament\Notifications\Notification
