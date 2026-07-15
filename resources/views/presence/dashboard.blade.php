@@ -69,9 +69,14 @@
                         {{ \Carbon\Carbon::parse($moisCourant . '-01')->translatedFormat('F Y') }}
                     </p>
                 </div>
-                <span class="inline-flex items-center gap-2 rounded-full bg-blue-500/15 text-blue-200 px-2.5 py-1 text-[11px] font-medium whitespace-nowrap">
-                    Portail agent
-                </span>
+                <div class="text-right">
+                    <p id="dashboard-clock" class="text-white text-xl sm:text-2xl font-extrabold tabular-nums leading-none">
+                        {{ now()->format('H:i:s') }}
+                    </p>
+                    <p class="text-slate-400 text-[10px] sm:text-xs mt-1">
+                        {{ now()->translatedFormat('l d/m/Y') }}
+                    </p>
+                </div>
             </div>
             <div class="grid grid-cols-3 gap-2 sm:gap-3">
                 <div class="rounded-xl min-h-[76px] p-2 sm:p-3 bg-green-500/12 border border-green-400/20 ring-1 ring-green-300/10 text-center flex flex-col items-center justify-center">
@@ -180,5 +185,21 @@
         @endif
         @endunless
     </main>
+
+    <script>
+        function updateDashboardClock() {
+            const clock = document.getElementById('dashboard-clock');
+            if (!clock) return;
+
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            clock.textContent = h + ':' + m + ':' + s;
+        }
+
+        updateDashboardClock();
+        setInterval(updateDashboardClock, 1000);
+    </script>
 </body>
 </html>
