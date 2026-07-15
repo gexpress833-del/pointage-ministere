@@ -251,8 +251,11 @@ class PresenceController extends Controller
         $presentCount = $signeCount - $retardCount;
 
         $aujourdhui = Carbon::today();
-        $sessionsComptables = $sessions->filter(function ($s) use ($aujourdhui) {
-            return $s->date->lessThan($aujourdhui) && $s->isFermee();
+        $sessionsAvecPointages = Presence::whereIn('session_id', $sessionsIds)->pluck('session_id')->unique();
+        $sessionsComptables = $sessions->filter(function ($s) use ($aujourdhui, $sessionsAvecPointages) {
+            return $s->date->lessThan($aujourdhui)
+                && $s->isFermee()
+                && $sessionsAvecPointages->contains($s->id);
         })->count();
 
         return [
