@@ -37,8 +37,8 @@ class ChefBureauPanelProvider extends PanelProvider
             ->path('chef')
             ->login()
             ->brandName(config('app.name'))
-            ->brandLogo(fn () => '<img src="'.asset('logo3.png').'" alt="Logo" class="h-8 w-auto object-contain">')
-            ->darkModeBrandLogo(fn () => '<img src="'.asset('logo3.png').'" alt="Logo" class="h-8 w-auto object-contain">')
+            ->brandLogo(fn () => '<img src="'.route('brand-logo').'" alt="Logo" class="h-8 w-auto object-contain">')
+            ->darkModeBrandLogo(fn () => '<img src="'.route('brand-logo').'" alt="Logo" class="h-8 w-auto object-contain">')
             ->colors([
                 'primary' => Color::Amber,
             ])

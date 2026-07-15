@@ -15,6 +15,15 @@ Route::get('/test', function () {
     return 'Laravel is working!';
 });
 
+Route::get('/brand-logo.png', function () {
+    $path = public_path('logo3.png');
+    if (! file_exists($path)) {
+        abort(404);
+    }
+
+    return response()->file($path, ['Cache-Control' => 'public, max-age=86400']);
+})->name('brand-logo');
+
 Route::get('/', function () {
     return view('landing');
 })->name('home');
