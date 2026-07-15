@@ -9,10 +9,12 @@ use App\Models\Presence;
 use App\Models\SessionPresence;
 use Carbon\Carbon;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ListSessionsPresence extends ListRecords
 {
@@ -79,62 +81,63 @@ class ListSessionsPresence extends ListRecords
                 ->color('danger')
                 ->visible(fn () => $user && $user->isAdministrateur())
                 ->form([
-                    Select::make('session_id')
-                        ->label('Session (journée)')
-                        ->options(function () {
-                            return SessionPresence::orderBy('date', 'desc')
-                                ->limit(30)
-                                ->get()
-                                ->mapWithKeys(fn ($s) => [$s->id => $s->date->format('d/m/Y').' ('.$s->statut.')'])
-                                ->toArray();
-                        })
-                        ->placeholder('Toutes les sessions de la période')
-                        ->nullable(),
-                    DatePicker::make('date_debut')
-                        ->label('Date de début (optionnel)')
-                        ->nullable(),
-                    DatePicker::make('date_fin')
-                        ->label('Date de fin (optionnel)')
-                        ->nullable(),
+                    DatePicker::make('date_reset')
+                        ->label('Date à réinitialiser')
+                        ->required()
+                        ->native(true),
+                    Checkbox::make('delete_session')
+                        ->label('Supprimer aussi la session de cette journée (définitif — la journée disparaît complètement)')
+                        ->default(true),
                 ])
                 ->action(function (array $data) {
-                    if (! Parametre::sessionAllowResetPresences()) {
+                    $dateReset = $data['date_reset'] ?? null;
+                    $deleteSession = ! empty($data['delete_session']);
+
+                    if (! $dateReset) {
                         \Filament\Notifications\Notification::make()
-                            ->title('Action désactivée')
-                            ->body('La réinitialisation des pointages est désactivée dans les paramètres.')
+                            ->title('Date manquante')
+                            ->body('Veuillez sélectionner une date.')
                             ->danger()
                             ->send();
                         return;
                     }
 
-                    $query = Presence::query();
+                    $session = SessionPresence::where('date', $dateReset)->first();
 
-                    if (! empty($data['session_id'])) {
-                        $query->where('session_id', $data['session_id']);
-                    } elseif (! empty($data['date_debut']) || ! empty($data['date_fin'])) {
-                        $sessionIds = SessionPresence::query();
-                        if (! empty($data['date_debut'])) {
-                            $sessionIds->where('date', '>=', $data['date_debut']);
-                        }
-                        if (! empty($data['date_fin'])) {
-                            $sessionIds->where('date', '<=', $data['date_fin']);
-                        }
-                        $query->whereIn('session_id', $sessionIds->pluck('id'));
-                    } else {
+                    if (! $session) {
                         \Filament\Notifications\Notification::make()
-                            ->title('Aucun critère')
-                            ->body('Veuillez sélectionner une session ou une période.')
+                            ->title('Aucune session')
+                            ->body('Aucune session trouvée pour le '.$dateReset.'.')
                             ->warning()
                             ->send();
                         return;
                     }
 
-                    $count = $query->count();
-                    $query->delete();
+                    $presencesCount = Presence::where('session_id', $session->id)->count();
+
+                    DB::transaction(function () use ($session, $deleteSession) {
+                        Presence::where('session_id', $session->id)->delete();
+
+                        if ($deleteSession) {
+                            $session->delete();
+                        } else {
+                            $session->update([
+                                'statut' => SessionPresence::STATUT_OUVERTE,
+                                'opened_by' => Auth::id(),
+                                'opened_at' => now(),
+                                'closed_by' => null,
+                                'closed_at' => null,
+                            ]);
+                        }
+                    });
+
+                    $msg = $deleteSession
+                        ? $presencesCount.' pointage(s) supprimé(s) et session du '.$dateReset.' effacée définitivement. Historiques et rapports remis à zéro.'
+                        : $presencesCount.' pointage(s) supprimé(s) pour le '.$dateReset.'. Session rouverte. Historiques et rapports remis à zéro.';
 
                     \Filament\Notifications\Notification::make()
-                        ->title('Pointages réinitialisés')
-                        ->body($count.' enregistrement(s) de présence supprimé(s).')
+                        ->title('Réinitialisation effectuée')
+                        ->body($msg)
                         ->success()
                         ->send();
                 })

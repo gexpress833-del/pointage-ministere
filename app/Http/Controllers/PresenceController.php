@@ -239,20 +239,26 @@ class PresenceController extends Controller
      */
     private function statsPourMois(User $user, string $moisYyyyMm): array
     {
-        $sessionsIds = SessionPresence::whereYear('date', substr($moisYyyyMm, 0, 4))
+        $sessions = SessionPresence::whereYear('date', substr($moisYyyyMm, 0, 4))
             ->whereMonth('date', substr($moisYyyyMm, 5, 2))
-            ->pluck('id');
+            ->get();
 
-        $totalSessions = $sessionsIds->count();
+        $sessionsIds = $sessions->pluck('id');
+
         $signeCount = Presence::where('user_id', $user->id)->whereIn('session_id', $sessionsIds)->count();
         $retardCount = Presence::where('user_id', $user->id)->whereIn('session_id', $sessionsIds)
             ->where('statut', Presence::STATUT_RETARD)->count();
         $presentCount = $signeCount - $retardCount;
 
+        $aujourdhui = Carbon::today();
+        $sessionsComptables = $sessions->filter(function ($s) use ($aujourdhui) {
+            return $s->date->lessThan($aujourdhui) && $s->isFermee();
+        })->count();
+
         return [
             'presents' => $presentCount,
             'retards' => $retardCount,
-            'absences' => max(0, $totalSessions - $signeCount),
+            'absences' => max(0, $sessionsComptables - $signeCount),
         ];
     }
 
