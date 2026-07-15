@@ -43,9 +43,9 @@ class SessionPresenceResource extends Resource
                     ->badge()
                     ->color(fn ($state): string => $state === SessionPresence::STATUT_OUVERTE ? 'success' : 'gray'),
                 TextColumn::make('openedBy.nom')->label('Ouverte par')->default('—'),
-                TextColumn::make('opened_at')->label('Ouverte le')->dateTime('d/m/Y H:i')->sortable()->default('—'),
-                TextColumn::make('closedBy.nom')->label('Fermée par')->default('—'),
-                TextColumn::make('closed_at')->label('Fermée le')->dateTime('d/m/Y H:i')->sortable()->default('—'),
+                TextColumn::make('opened_at')->label('Ouverte le')->dateTime('d/m/Y H:i')->sortable()->placeholder('—'),
+                TextColumn::make('closedBy.nom')->label('Fermée par')->placeholder('—'),
+                TextColumn::make('closed_at')->label('Fermée le')->dateTime('d/m/Y H:i')->sortable()->placeholder('—'),
                 TextColumn::make('presences_count')->label('Signatures')->counts('presences'),
             ])
             ->defaultSort('date', 'desc')
