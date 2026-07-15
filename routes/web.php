@@ -24,6 +24,21 @@ Route::get('/brand-logo.png', function () {
     return response()->file($path, ['Cache-Control' => 'public, max-age=86400']);
 })->name('brand-logo');
 
+Route::get('/cron/run', function (\Illuminate\Http\Request $request) {
+    $key = config('app.cron_secret_key');
+
+    if (! $key || $request->query('key') !== $key) {
+        abort(403, 'Clé cron invalide.');
+    }
+
+    \Illuminate\Support\Facades\Artisan::call('schedule:run');
+
+    return response()->json([
+        'success' => true,
+        'output' => trim(\Illuminate\Support\Facades\Artisan::output()),
+    ]);
+})->name('cron.run');
+
 Route::get('/', function () {
     return view('landing');
 })->name('home');
